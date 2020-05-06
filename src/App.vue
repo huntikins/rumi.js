@@ -1,34 +1,29 @@
 <template>
-  <div id="app" class="container">
-    <div class="card-columns">
-      <template v-for="card in cards">
-        <div class="card" :key="card.id">
-          <img :src="card.front" :alt="card.value + ' of ' + card.suit" class="card-img-top"/>
-        </div>
-      </template>
-    </div>
+  <div id="app">
   </div>
 </template>
 
 <script>
 import baseDeck from '@/logic/cards.js';
-import { shuffle, merge, deckCount } from '@/logic/decksetup.js'
+import { shuffle, merge, deckCount, dealCards } from '@/logic/deck.js'
 export default {
   data: () => {
     return {
       cards: [],
       decks: 0,
-      players: 4
+      playerCount: 6,
+      playerHands: []
     }
   },
   created: function() {
-    this.decks = deckCount(this.players)
-    console.log(this.decks)
+    this.decks = deckCount(this.playerCount)
     this.cards = merge(baseDeck, this.decks)
     shuffle(this.cards)
+    this.playerHands = dealCards(this.cards, this.playerCount, 10)
+    console.log(this.cards)
   },
   mounted: function(){
-    console.log(this.cards)
+    console.log(this.playerHands)
   }
 }
 </script>
