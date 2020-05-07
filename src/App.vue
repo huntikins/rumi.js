@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import baseDeck from '@/logic/cards.js';
-import { shuffle, merge, deckCount, dealCards } from '@/logic/deck.js'
+import { playerCount } from './logic/player';
+import { newGame, gameStart } from './logic/game.js';
 export default {
   data: () => {
     return {
@@ -16,10 +16,9 @@ export default {
     }
   },
   created: function() {
-    this.decks = deckCount(this.playerCount)
-    this.cards = merge(baseDeck, this.decks)
-    shuffle(this.cards)
-    this.playerHands = dealCards(this.cards, this.playerCount, 10)
+    this.playerCount = playerCount();
+    this.cards = newGame(this.playerCount);
+    this.playerHands = gameStart(this.cards, this.playerCount, 10)
     console.log(this.cards)
   },
   mounted: function(){

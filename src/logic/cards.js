@@ -52,4 +52,4 @@ function generateId(){
 }
 
 // exports the card deck object
-module.exports = deck;
+module.exports =  deck

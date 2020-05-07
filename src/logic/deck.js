@@ -1,3 +1,4 @@
+//shuffle elements based on Fisher-Yates shuffle method
 function shuffle(array) {
     var m = array.length, t, i;
     // While there remain elements to shuffle…
@@ -13,6 +14,7 @@ function shuffle(array) {
     //shuffling created using the fisher-yates shuffle method https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
 }
 
+//merges multiple decks together based on player count
 function merge(array, count) {
     let mergedDeck = []
     for (i = 0;i<count;i++){
@@ -21,6 +23,7 @@ function merge(array, count) {
     return mergedDeck
 }
 
+//determines number of decks to be used
 function deckCount(players){
     //min 2 decks + 1 deck for each addit 2 people after 4 players
     if (players <= 4){return 2;}
@@ -31,6 +34,16 @@ function deckCount(players){
     }
 }
 
+//determines cards to deal per round
+function cardCount(round){
+    if (round <= 4){
+        return 10
+    } else {
+        return 12
+    }
+}
+
+//deals cards out to players
 function dealCards(cards, players, cardCount){
     let playerHands = []
     //determine player count
@@ -56,4 +69,4 @@ function dealCards(cards, players, cardCount){
 //     return balancedDeck
 // }
 
-export {shuffle, merge, deckCount, dealCards}
+export {shuffle, merge, deckCount, dealCards, cardCount}
