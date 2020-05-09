@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <text class="text-color-primary">My Vue Native App</text>
+    <text class="text-blue text-logo text-large">rumi</text>
   </view>
 </template>
 
@@ -29,8 +29,19 @@ export default {
 </script>
 
 <style lang="scss">
-.text-container {
+.container {
+  align-items: center;
+  justify-content: center;
   flex: 1;
-  margin-bottom: 30;
+}
+.text-blue {
+  color: #334ab7
+}
+.text-large {
+  font-size: 50px;
+}
+
+.text-logo {
+  font-weight: 200;
 }
 </style>
