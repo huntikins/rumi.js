@@ -1,7 +1,34 @@
-# rumi.js
-Contract Rumi on the internet
+# rumi
 
-Currently in progress, rules and live site will be posted once development completes.
+## Project setup
+```
+yarn install
+```
 
----
-Card assets: https://code.google.com/archive/p/vector-playing-cards/
+### Compiles and hot-reloads for development
+```
+yarn serve
+```
+
+### Compiles and minifies for production
+```
+yarn build
+```
+
+### Run your unit tests
+```
+yarn test:unit
+```
+
+### Run your end-to-end tests
+```
+yarn test:e2e
+```
+
+### Lints and fixes files
+```
+yarn lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
