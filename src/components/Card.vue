@@ -26,7 +26,7 @@ export default {
   background-color: transparent;
   width: 250px;
   height: 363px;
-  perspective: 1000px;
+  perspective: 1500px;
   display: inline-flex;
 }
 

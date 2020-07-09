@@ -3,34 +3,33 @@
     <h1 class="text-blue text-logo text-large">Lets Play</h1>
     <div class="d-flex">
       <template v-for="player in playerHands">
-        <Hand :cards="player" :key="player.name" />
+        <Table :cards="player" :key="player.name" />
       </template>
     </div>
   </v-app>
 </template>
 
 <script>
-import { playerCount } from "../logic/player";
-import { newGame, gameStart } from "../logic/game.js";
-
-import Hand from "../components/Hand";
+import { players } from "../js/player";
+import { newGame, gameStart } from "../js/game.js";
+import Table from "../components/Table";
 
 export default {
   data: () => {
     return {
       cards: [],
       decks: 0,
-      playerCount: 6,
+      playerCount: 0,
       playerHands: []
     };
   },
   components: {
-    Hand
+    Table
   },
   created: function() {
-    this.playerCount = playerCount();
+    this.playerCount = players.length;
     this.cards = newGame(this.playerCount);
-    this.playerHands = gameStart(this.cards, this.playerCount, 10);
+    this.playerHands = gameStart(this.cards, this.playerCount);
     console.log(this.cards);
   },
   mounted: function() {

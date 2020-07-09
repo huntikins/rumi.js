@@ -26,33 +26,24 @@ function merge(array, count) {
 }
 
 //determines number of decks to be used
-function deckCount(players) {
-  //min 2 decks + 1 deck for each addit 2 people after 4 players
-  if (players <= 4) {
+function deckCount(playerCount) {
+  //min 2 decks + 1 deck for each addit 2 people after 4 playerCount
+  if (playerCount <= 4) {
     return 2;
   } else {
-    let diff = players - 4;
+    let diff = playerCount - 4;
     let decks = Math.ceil(diff / 2);
     return decks + 2;
   }
 }
 
-//determines cards to deal per round
-function cardCount(round) {
-  if (round <= 4) {
-    return 10;
-  } else {
-    return 12;
-  }
-}
-
-//deals cards out to players
-function dealCards(cards, players, cardCount) {
+//deals cards out to playerCount
+function dealCards(cards, playerCount, cardCount, players) {
   let playerHands = [];
   //determine player count
-  for (let p = 0; p < players; p++) {
+  for (let p = 0; p < playerCount; p++) {
     let playerObj = {
-      name: `player ${p + 1}`,
+      name: players[p],
       hand: [],
       score: 0,
       turn: false
@@ -77,4 +68,4 @@ function dealCards(cards, players, cardCount) {
 //     return balancedDeck
 // }
 
-export { shuffle, merge, deckCount, dealCards, cardCount };
+export { shuffle, merge, deckCount, dealCards };
