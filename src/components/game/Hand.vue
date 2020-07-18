@@ -1,5 +1,5 @@
 <template>
-  <v-card class="px-5">
+  <div class="px-5">
     <h1>{{ cards.name }}</h1>
     <div v-for="card in cards.hand" :key="card.id">
       <Card
@@ -9,10 +9,10 @@
         :altFront="card.value + ' of ' + card.suit"
       />
     </div>
-  </v-card>
+  </div>
 </template>
 <script>
-import Card from "../components/Card";
+import Card from "./Card";
 
 export default {
   props: ["cards"],

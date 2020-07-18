@@ -1,0 +1,42 @@
+
+Room Schema:
+    :room-id: {
+        player: [
+            {
+                id: String,
+                name: String,
+                avatar: String,
+                turn: True,
+                score: 0,
+                isBuying: False,
+                discardNeeded: True,
+                hand: []
+            },
+            {
+                id: String,
+                name: String,
+                avatar: String,
+                turn: False,
+                score: 0,
+                isBuying: False,
+                discardNeeded: False,
+                hand: []
+            }
+        ],
+        round: Number,
+        active: Boolean,
+        waitingOnPlayer: {
+            status: False,
+            id: String
+        }
+    }
+
+Player Schema:
+    :player-id {
+        id: String,
+        username: String,
+        email: String,
+        avatar: String,
+        rooms: [":room-id", ":room-id"],
+        friends: [":player-id", ":player-id"],
+    }
