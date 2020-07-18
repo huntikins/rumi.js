@@ -87,7 +87,7 @@ export default {
             })
             .then(function() {
               router.push({
-                name: "game",
+                name: "play",
                 params: { room: self.room }
               });
             })

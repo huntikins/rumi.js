@@ -5,6 +5,7 @@ import Login from "../views/Login";
 import Register from "../views/Register";
 import Dashboard from "../views/Dashboard";
 import Account from "../views/Account";
+import Play from "../views/Play.vue";
 import { auth } from "../js/firebase";
 
 Vue.use(VueRouter);
@@ -43,11 +44,8 @@ const routes = [
   },
   {
     path: "/play/:room",
-    name: "game",
-    // route level code-splitting
-    // this generates a separate chunk (game.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "game" */ "../views/Game.vue"),
+    name: "play",
+    component: Play,
     meta: {
       requiresAuth: true
     }
