@@ -1,11 +1,8 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import * as fb from "../js/firebase";
+import { createStore } from 'vuex'
+import * as fb from "../assets/js/firebase";
 import router from "../router/index";
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
   state: {
     userProfile: {}
   },
@@ -61,4 +58,4 @@ export default new Vuex.Store({
       router.push("/login");
     }
   }
-});
+})

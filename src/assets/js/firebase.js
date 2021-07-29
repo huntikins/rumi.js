@@ -4,14 +4,13 @@ import "firebase/firestore";
 
 // config
 const firebaseConfig = {
-  apiKey: "AIzaSyCVhmH7QMcWDnOmb0Z9p2yqyw5-brLcJ8I",
-  authDomain: "rumi-js.firebaseapp.com",
-  databaseURL: "https://rumi-js.firebaseio.com",
-  projectId: "rumi-js",
-  storageBucket: "rumi-js.appspot.com",
-  messagingSenderId: "699917958425",
-  appId: "1:699917958425:web:30475c52e6704d06fbd988",
-  measurementId: "G-9YDM9SWZRG"
+  apiKey: "AIzaSyCA2-x5o2aXUVMQJ81P8RWPFao4i-W0uoU",
+    authDomain: "vue-rumi.firebaseapp.com",
+    projectId: "vue-rumi",
+    storageBucket: "vue-rumi.appspot.com",
+    messagingSenderId: "394611465154",
+    appId: "1:394611465154:web:8741050f7a4f766838d45b",
+    measurementId: "G-W03MEW7TQ7"
 };
 firebase.initializeApp(firebaseConfig);
 
