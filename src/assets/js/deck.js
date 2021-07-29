@@ -25,17 +25,6 @@ function merge(array, count) {
   return mergedDeck;
 }
 
-//determines number of decks to be used
-function deckCount(playerCount) {
-  //min 2 decks + 1 deck for each addit 2 people after 4 playerCount
-  if (playerCount <= 4) {
-    return 2;
-  } else {
-    let diff = playerCount - 4;
-    let decks = Math.ceil(diff / 2);
-    return decks + 2;
-  }
-}
 
 //deals cards out to playerCount
 function dealCards(cards, playerCount, cardCount, players) {
@@ -57,15 +46,4 @@ function dealCards(cards, playerCount, cardCount, players) {
   return playerHands;
 }
 
-// function balanceDeck(cards, playerHands){
-//     //wrote this thinking that the deck wasn't updated after dealing out cards but it is.
-//     let cardsObj = playerHands.map(function (obj) { return obj.hand; });
-//     let cardsInPlay = [];
-//     for (i = 0; i < cardsObj.length; i++){
-//         cardsInPlay.push(...cardsObj[i])
-//     }
-//     let balancedDeck = cards.filter(item => cardsInPlay.every(item2 => item2.id != item.id));
-//     return balancedDeck
-// }
-
-export { shuffle, merge, deckCount, dealCards };
+export { shuffle, merge, dealCards };
