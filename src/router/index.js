@@ -1,5 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import Home from '../views/Home.vue';
+import Login from '../views/Login.vue';
+import Register from '../views/Register.vue';
+import Account from '../views/Account.vue';
+import firebase from 'firebase';
+//import store from '../store/index';
 
 // Lazy load routes
 const Play = () => import(/* webpackChunkName: "rumi" */ '../game/Play');
@@ -15,19 +20,46 @@ const routes = [
     component: Home
   },
   {
+      path: '/login',
+      name: 'login',
+      component: Login
+  },
+  {
+      path: '/register',
+      name: 'Register',
+      component: Register
+  },
+  {
+      path: '/account',
+      name: 'Account',
+      component: Account,
+      meta: {
+        authRequired: true,
+      }
+  },
+  {
     path: '/play/:id?',
     name: 'Play',
-    component: Play
+    component: Play,
+    meta: {
+      authRequired: true,
+    }
   },
   {
     path: '/new',
     name: 'New',
-    component: New
+    component: New,
+    meta: {
+      authRequired: true,
+    }
   },
   {
     path: '/join',
     name: 'Join',
-    component: Join
+    component: Join,
+    meta: {
+      authRequired: true,
+    }
   },
   {
     path: '/how-to-play',
@@ -42,6 +74,19 @@ const router = createRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.authRequired)) {
+    if (firebase.auth().currentUser) {
+      next();
+    } else {
+      next({
+        path: '/login',
+      });
+    }
+  } else {
+    next();
+  }
+});
 
 export default router
  

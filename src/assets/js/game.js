@@ -1,7 +1,7 @@
-import { deal, Player, roundSchema } from './actions';
+import { deal, roundSchema } from './actions';
 
 // Shuffle and deal cards
-async function start(players, {cardCount}) {
+async function start(players, cardCount) {
   // Generate deck
   const { cards } = await fetch('/.netlify/functions/buildDeck', {
     method: 'POST',
@@ -16,4 +16,4 @@ async function start(players, {cardCount}) {
 }
 
 // Export game mechanics
-export { start, Player, roundSchema };
+export { start, roundSchema };

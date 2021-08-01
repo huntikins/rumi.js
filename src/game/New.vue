@@ -9,15 +9,10 @@
             </div>
             <div class="row">
                 <div class="col-6 mx-auto">
-                    <form @submit.prevent="gameStart">
+                    <form @submit.prevent="createRoom">
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input v-model="username" type="text" class="form-control" id="username">
-                        </div>
-                        <div class="mb-3">
-                            <label for="avatar" class="form-label">Player Image</label>
-                            <input v-model="avatar" type="url" class="form-control" id="avatar" aria-describedby="textHelp">
-                            <div id="textHelp" class="form-text">Get the URL to an image and add it here</div>
+                            <label for="room_name" class="form-label">Room Name</label>
+                            <input v-model="form.room_name" type="text" class="form-control" id="room_name">
                         </div>
                         <input type="submit" class="btn btn-primary" value="Submit"/>
                     </form>
@@ -28,18 +23,58 @@
 </template>
 <script>
 import appHero from '../components/Hero.vue';
+import { roomsRef } from '../main'
 export default {
   name: 'New',
   data() {
       return {
-          username: '',
-          avatar: ''
+          form: {
+              room_name: null
+          }
       }
   },
   methods: {
-      gameStart(){
-          console.log("i've been called")
-          this.$router.push(`/play/${this.username}`)
+      createRoom(){
+          roomsRef.add({
+              active: false,
+              name: this.form.room_name,
+              currentPlayer: 0,
+              openBuy: false,
+              cards: [],
+              discards: [],
+              goal: {
+                  round: 1,
+                  sets: 2,
+                  runs: 0,
+                  cardCount: 10,
+                  discard: true,
+              },
+              users: [{
+                id: this.$store.state.user.data.id,
+                name: this.$store.state.user.data.displayName,
+                hand: [],
+                score: 0,
+                turn: false,
+                avi: this.$store.state.user.data.avi,
+                isBuying: false,
+                discardNeeded: false,
+              }],
+              host: this.$store.state.user.data.id,
+              host_avi: this.$store.state.user.data.avi,
+              host_name: this.$store.state.user.data.displayName
+          })
+        .then((docRef) => {
+            roomsRef.doc(docRef.id).set({
+              id: docRef.id
+            }, { merge: true }).then(()=> {
+              this.$router.push(`/play/${docRef.id}`)
+            }).catch((error) => {
+                console.error("Error adding document: ", error);
+            });
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
       }
   },
   components: {

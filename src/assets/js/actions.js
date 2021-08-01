@@ -1,23 +1,19 @@
-// Creates player object
-function Player(id, name, turn, avatar) {
-    this.id = id;
-    this.name = name;
-    this.hand = [];
-    this.score = 0;
-    this.turn = turn;
-    this.avatar = avatar;
-    this.isBuying = false;
-    this.discardNeeded = false;
-}
+
 
 //deals cards out to playerCount
 function deal(cardCount, players, cards) {
+    console.log(cardCount)
     let liveDeck = shuffle(cards);
-    let hands = players;
+    let hands = []
+    players.forEach( ( ) => {
+        hands.push([])
+    })
+    console.log(hands)
     //determine player count
     for(let i=0; i < cardCount;i++){  
-        hands.forEach(player => {
-            player.hand.push(liveDeck.shift());
+        players.forEach( (player, index) => {
+            console.log(index)
+            hands[index].push(liveDeck.shift());
         })
     }
     return {hands, liveDeck};
@@ -60,4 +56,4 @@ const round7 = new Round(7, 0, 3, 12, false);
 //assign rounds to array
 const roundSchema = [round1, round2, round3, round4, round5, round6, round7];
 
-export { deal, shuffle, roundSchema, Player }
+export { deal, shuffle, roundSchema}

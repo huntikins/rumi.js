@@ -19,8 +19,37 @@
         <li class="nav-item">
           <router-link class="nav-link" to="/how-to-play">How To Play</router-link>
         </li>
+        <li class="nav-item">
+          <router-link class="nav-link" to="/register">Sign Up</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link class="nav-link" to="/login">Log In</router-link>
+        </li>
+        <li class="nav-item">
+          <button @click="logOut" class="nav-link" >Log Out</button>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
 </template>
+<script>
+import firebase from 'firebase';
+
+export default {
+  methods: {
+    logOut() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.push('/');
+        })
+        .catch(error => {
+          console.log(error.message);
+          this.$router.push('/');
+        });
+    },
+  },
+}
+</script>
