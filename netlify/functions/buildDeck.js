@@ -18,16 +18,16 @@ exports.handler = async function(event){
             value: "joker",
             suit: "black",
             points: 50,
-            front: `./img/cards/default/black_joker.png`,
-            back: `./img/cards/default/back.png`
+            front: `../img/cards/default/black_joker.png`,
+            back: `../img/cards/default/back.png`
         });
         deck.push({
             id: generateId("joker", "red", id),
             value: "joker",
             suit: "red",
             points: 50,
-            front: `./img/cards/default/red_joker.png`,
-            back: `./img/cards/default/back.png`
+            front: `../img/cards/default/red_joker.png`,
+            back: `../img/cards/default/back.png`
         });
         return deck;
     }
@@ -67,8 +67,8 @@ exports.handler = async function(event){
                 value: cardValue,
                 suit: cardSuit,
                 points: cardPoint,
-                front: `./img/cards/default/${cardValue}_of_${cardSuit}.png`,
-                back: `./img/cards/default/back.png`
+                front: `../img/cards/default/${cardValue}_of_${cardSuit}.png`,
+                back: `../img/cards/default/back.png`
             });
         }
     }

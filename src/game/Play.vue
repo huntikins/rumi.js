@@ -1,7 +1,5 @@
 <template>
-  <button v-if="game.host == this.$store.state.user.data.id" @click="gameInit">Start Game</button>
-  <p v-else>Waiting for Host to start the game</p>
-  <button @click="turnStart">Draw</button>
+  <!-- 
   <ol v-if="game.active">
     <li v-for="card in game.users[playerIndex].hand" :key="card.id">
       <button :id="card.id" @click="discard(card.id)">{{ card.value }} of {{ card.suit }}</button>
@@ -11,10 +9,42 @@
     <li v-for="card in game.discards" :key="card.id">
       <button :id="card.id" @click="buy(card.id)">{{ card.value }} of {{ card.suit }}</button>
     </li>
-  </ol>
-  <!--
-        Game UI
-    -->
+  </ol> -->
+    <section class="container-fluid">
+      <!-- Game UI -->
+      <div class="row">
+        <div class="col-12 d-flex justify-content-start align-items-center p-4 bg-primary rounded-pill" v-for="player in game.users" :key="player.id">
+          <img :src="player.avi" :alt="player.name" class="rounded-circle" width="50" height="50">
+          <p class="ps-3 mb-0" id="offcanvasScrollingLabel">{{ player.name }}</p>
+          <div class="cards_in_play">
+            <p class="mb-0 ps-3">Sets</p>
+
+          </div>
+          <p class="mb-0 ps-3">{{ player.score }} pts</p>
+        </div>
+      </div>
+      <!-- Player UI -->
+      <div class="offcanvas offcanvas-bottom show h-100 px-4" data-bs-scroll="true" data-bs-backdrop="false" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" style="visibility: visible;max-height: 50vh;">
+          <div class="offcanvas-header d-flex justify-content-start align-items-center">
+            <!-- Player Information -->
+            <img :src="$store.state.user.data.avi" :alt="$store.state.user.data.displayName" class="rounded-circle" width="50" height="50">
+            <p class="offcanvas-title ps-3 mb-0" id="offcanvasScrollingLabel">{{ $store.state.user.data.displayName }}</p>
+          </div>
+          <div class="offcanvas-body">
+            <!-- Card Grid -->
+            <div class="row">
+              <div class="col-lg-12">
+                <!-- Cards -->
+                <div class="row" v-if="ready">
+                  <div class="col-lg-1 col-md-2 col-sm-3" v-for="card in game.users[playerIndex].hand" :key="card.id">
+                    <button @click="action(card.id)"><img :src="card.front" :alt="card.id" class="img-fluid"/></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
 </template>
 
 <script>
@@ -24,6 +54,7 @@ export default {
   name: 'Play',
   data() {
     return {
+      ready: false,
       playerId: 1,
       playerIndex: null,
       currentPlayer: 0,
@@ -37,7 +68,9 @@ export default {
     console.log('sync data')
     roomsRef.doc(this.room).onSnapshot((doc) => {
         this.game = doc.data();
-    });
+        this.ready = true;
+        this.playerIndex = this.game.users.findIndex(player => this.$store.state.user.data.id == player.id);
+    })
   },
   updated(){
     roomsRef.doc(this.room).set(this.game).then(() => {
@@ -57,7 +90,6 @@ export default {
       this.game.users.forEach((player, index) => {
         player.hand.push(...hands[index])
       })
-      this.playerIndex = this.game.users.findIndex(player => this.$store.state.user.data.id == player.id);
       this.game.active = true;
       this.game.users[this.currentPlayer].turn = true
     },
