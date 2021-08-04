@@ -54,7 +54,7 @@ export default {
                 name: this.$store.state.user.data.displayName,
                 hand: [],
                 score: 0,
-                turn: false,
+                turn: true,
                 avi: this.$store.state.user.data.avi,
                 isBuying: false,
                 discardNeeded: false,

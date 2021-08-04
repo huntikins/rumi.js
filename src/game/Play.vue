@@ -1,43 +1,78 @@
 <template>
-  <!-- 
-  <ol v-if="game.active">
-    <li v-for="card in game.users[playerIndex].hand" :key="card.id">
-      <button :id="card.id" @click="discard(card.id)">{{ card.value }} of {{ card.suit }}</button>
-    </li>
-  </ol>
-  <ol v-if="game.active">
-    <li v-for="card in game.discards" :key="card.id">
-      <button :id="card.id" @click="buy(card.id)">{{ card.value }} of {{ card.suit }}</button>
-    </li>
-  </ol> -->
-    <section class="container-fluid">
+    <section class="container-fluid" v-if="ready">
       <!-- Game UI -->
-      <div class="row">
-        <div class="col-12 d-flex justify-content-start align-items-center p-4 bg-primary rounded-pill" v-for="player in game.users" :key="player.id">
-          <img :src="player.avi" :alt="player.name" class="rounded-circle" width="50" height="50">
-          <p class="ps-3 mb-0" id="offcanvasScrollingLabel">{{ player.name }}</p>
-          <div class="cards_in_play">
-            <p class="mb-0 ps-3">Sets</p>
-
+      <div class="row row-cols-xl-2 row-cols-1 g-4 py-5">
+        <div class="col" v-for="player in game.users" :key="player.id">
+          <p :class="`player_name mb-0 ${player.turn ? 'bg-success' : 'bg-light'}`" id="offcanvasScrollingLabel">{{ player.name }}</p>
+          <span class="ps-4">{{ player.score }} pts</span>
+          <div :class="`player d-flex justify-content-center align-items-center px-4 py-4 ${player.turn ? 'bg-success' : 'bg-light'}`">
+            <div class="d-flex">
+              <img :src="player.avi" :alt="player.name" class="rounded-circle avatar" width="75" height="75">
+            </div>
+            <div class="cards_in_play w-100">
+              <ul class="mb-0 ps-3" v-for="(set, index) in game.goal.sets" :key="'set_' + index">
+                <li>
+                  <img src="../../public/img/cards/default/back.png" alt="Image Back" class="img-fluid" width="50">
+                </li>
+                <li>
+                  <img src="../../public/img/cards/default/back.png" alt="Image Back" class="img-fluid" width="50">
+                </li>
+                <li>
+                  <img src="../../public/img/cards/default/back.png" alt="Image Back" class="img-fluid" width="50">
+                </li>
+              </ul>
+              <ul class="mb-0 ps-3" v-for="(run, index) in game.goal.runs" :key="'run_' + index">
+                <li>
+                  <img src="../../public/img/cards/default/back.png" alt="Image Back" class="img-fluid" width="50">
+                </li>
+                <li>
+                  <img src="../../public/img/cards/default/back.png" alt="Image Back" class="img-fluid" width="50">
+                </li>
+                <li>
+                  <img src="../../public/img/cards/default/back.png" alt="Image Back" class="img-fluid" width="50">
+                </li>
+                <li>
+                  <img src="../../public/img/cards/default/back.png" alt="Image Back" class="img-fluid" width="50">
+                </li>
+              </ul>
+            </div>
           </div>
-          <p class="mb-0 ps-3">{{ player.score }} pts</p>
         </div>
       </div>
       <!-- Player UI -->
-      <div class="offcanvas offcanvas-bottom show h-100 px-4" data-bs-scroll="true" data-bs-backdrop="false" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" style="visibility: visible;max-height: 50vh;">
-          <div class="offcanvas-header d-flex justify-content-start align-items-center">
+      <div class="offcanvas offcanvas-bottom show h-100" data-bs-scroll="true" data-bs-backdrop="false" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" style="visibility: visible;max-height: 50vh;">
+          <div :class="`offcanvas-header d-flex justify-content-between align-items-center px-4 ${this.game.users[this.playerIndex].turn ? 'bg-success' : 'bg-light'}`">
             <!-- Player Information -->
-            <img :src="$store.state.user.data.avi" :alt="$store.state.user.data.displayName" class="rounded-circle" width="50" height="50">
-            <p class="offcanvas-title ps-3 mb-0" id="offcanvasScrollingLabel">{{ $store.state.user.data.displayName }}</p>
+            <div class="d-flex justify-content-center align-items-center px-4">
+              <img :src="$store.state.user.data.avi" :alt="$store.state.user.data.displayName" class="rounded-circle avatar" width="75" height="75">
+              <p class="offcanvas-title ps-3 mb-0" id="offcanvasScrollingLabel">{{ $store.state.user.data.displayName }}</p>
+            </div>
+            <div class="controls" v-if="game.active">
+              <button @click="turnStart" :disabled="game.users[playerIndex].turn ? false : true">Draw</button>
+              <button>Buy</button>
+              <button :disabled="game.users[playerIndex].turn ? false : true">Go Down</button>
+            </div>
+            <div class="controls" v-if="!game.active && game.users[playerIndex].id == game.host">
+              <button @click="gameInit">Start Game</button>
+            </div>
+            <div class="controls" v-if="!game.active && game.users[playerIndex].id !== game.host">
+              <p class="mb-0">Waiting for host to begin the game</p>
+            </div>
+            <div class="goal">
+              <p>Goal</p>
+              <p v-if="game.goal.sets">{{ game.goal.sets }} Sets</p>
+              <p v-if="game.goal.runs">{{ game.goal.runs }} Run{{ game.goal.runs > 2 ? 's' : '' }}</p>
+              <p v-if="!game.goal.discard">No Discard</p>
+            </div>
           </div>
           <div class="offcanvas-body">
             <!-- Card Grid -->
             <div class="row">
               <div class="col-lg-12">
                 <!-- Cards -->
-                <div class="row" v-if="ready">
+                <div class="row">
                   <div class="col-lg-1 col-md-2 col-sm-3" v-for="card in game.users[playerIndex].hand" :key="card.id">
-                    <button @click="action(card.id)"><img :src="card.front" :alt="card.id" class="img-fluid"/></button>
+                    <button @click="discard(card.id)"><img :src="card.front" :alt="card.id" class="img-fluid"/></button>
                   </div>
                 </div>
               </div>
@@ -45,8 +80,83 @@
           </div>
         </div>
     </section>
+    <section v-else class="game_pending bg-dark d-flex justfy-content-center align-items-center">
+      <h1 class="text-white text-center mx-auto">Loading Game Data</h1>
+    </section>
 </template>
-
+<style lang="scss">
+.game_pending {
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+}
+.player {
+  p {
+    font-family: $headings;
+    letter-spacing: .15rem;
+  }
+}
+.offcanvas-header {
+  border-bottom: 1px solid rgba(0,0,0,.2);
+  flex-wrap: wrap;
+  .cards_in_play {
+    @media(max-width: 992px){
+      padding-top: 2rem;
+      order: 3;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+.offcanvas-title {
+  font-family: $headings;
+  letter-spacing: .15rem;
+}
+.avatar {
+  border: 1px solid rgba(0,0,0,.2);
+}
+.cards_in_play {
+  display: flex;
+  padding-right: 3rem;
+  ul {
+    list-style-type: none;
+    display: flex;
+    margin-left: 2.5rem;
+    li {
+      margin: 0 .25rem;
+      img {
+        border: 1px solid rgba(0,0,0,.2);
+      }
+    }
+  }
+}
+.player_name {
+  background-color: #f8f9fa;
+  display: inline-block;
+  padding: .15rem 2rem;
+  font-family: $headings;
+  letter-spacing: .15rem;
+}
+.goal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1rem 3rem;
+  p {
+    margin-bottom: 0;
+    font-family: $headings;
+  }
+  @media(max-width: 992px){
+    flex-direction: row;
+    p {
+      padding-right: 2rem;
+    }
+  }
+}
+</style>
 <script>
 import { start } from '../assets/js/game';
 import { roomsRef } from '../main';
