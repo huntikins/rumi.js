@@ -1,3 +1,5 @@
+// TODO: Convert to typescript
+
 import { deal, roundSchema } from './actions';
 
 // Shuffle and deal cards

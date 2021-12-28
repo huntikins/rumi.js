@@ -1,13 +1,31 @@
-const fetch = require('node-fetch')
+/*
+* @route: /api/deck
+* @param: Playercount must be provided
+* @return: Array of card objects
+*/
 
-exports.handler = async function(event){
+import type { NextApiRequest, NextApiResponse } from 'next'
+
+type Deck = {
+  id: string,
+  value: string | number,
+  suit: string,
+  points: number,
+  front: string,
+  back: string
+}
+
+export default function handler(req: NextApiRequest, res: NextApiResponse){
     //figure out how many players are in the game to determine the deck count
-    const eventBody = JSON.parse(event.body);
+    const player = req.body;
 
+    if(!player.count){
+      res.status(400).json({ message: 'No player provided' })
+    }
     //establish the card deck as a variable
-    let deck = [];
+    let deck:Array<Deck> = [];
 
-    function genDeck(id){
+    function genDeck(id:string){
         //builds a single deck of cards
         genSet("spades", id);
         genSet("diamonds", id);
@@ -33,7 +51,7 @@ exports.handler = async function(event){
     }
 
     //generate the card objects using a loop
-    function genSet(cardSuit, id) {
+    function genSet(cardSuit:string, id:string) {
         for (let i = 1; i < 14; i++) {
             var cardValue;
             var cardPoint;
@@ -74,12 +92,12 @@ exports.handler = async function(event){
     }
 
     //generate a random hex uuid
-    function generateId(cardValue, cardSuit, id) {
+    function generateId(cardValue: string | number, cardSuit: string, id: string) {
         return `${cardSuit}_${cardValue}_${id}`
     }
 
     // determine deck count based on player count
-    function deckCount(playerCount) {
+    function deckCount(playerCount: number) {
         //min 2 decks + 1 deck for each addit 2 people after 4 playerCount
         if (playerCount <= 4) {
             return 2;
@@ -91,19 +109,14 @@ exports.handler = async function(event){
     }
 
     // establish final array containing all cards  users can play with
-    let decksUsed = deckCount(eventBody.playerCount)
-    let cards = [];
+    let decksUsed = deckCount(player.count)
+    let cards:Array<Deck> = [];
 
     // populate array with decks based on player count
-    for( i = 0;i < decksUsed; i++ ){
-        cards = [...genDeck(i+1)]
+    for( let i:number = 0;i < decksUsed; i++ ){
+        let count = i+1;
+        cards = [...genDeck(count.toString())]
     }
 
-
-    return {
-        statusCode: 200,
-        body: JSON.stringify({
-            cards: cards
-        })
-    }
+    res.status(200).json({ cards: cards })
 }

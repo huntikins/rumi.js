@@ -1,4 +1,4 @@
-
+// TODO: Convert to typescript
 
 //deals cards out to playerCount
 function deal(cardCount, players, cards) {
