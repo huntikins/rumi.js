@@ -1,9 +1,8 @@
-// TODO: Convert to typescript
-
-import { deal, roundSchema } from './actions';
+import {deal} from './actions';
+import roundSchema  from './round';
 
 // Shuffle and deal cards
-async function start(players, cardCount) {
+async function start(players: Player[], cardCount: number) {
   // Generate deck
   const { cards } = await fetch('/.netlify/functions/buildDeck', {
     method: 'POST',
