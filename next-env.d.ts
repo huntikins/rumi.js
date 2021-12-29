@@ -14,6 +14,20 @@ type Deck = {
   }
 
 type Player = {
-    name: string
-    id: string
+    id: string;
+    username: string;
+    hand: Deck[];
+    score: number;
+    turn: boolean;
+    icon: string;
+    isBuying: boolean;
+    discardNeeded: boolean;
+}
+
+type Round = {
+    round: number, 
+    sets: number, 
+    runs: number, 
+    cardCount: number, 
+    discard: boolean
 }

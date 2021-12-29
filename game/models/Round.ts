@@ -6,8 +6,8 @@ class Round {
     cardCount: number;
     discard: boolean;
    
-    constructor(order: number, sets: number, runs: number, cardCount: number, discard: boolean) {
-        this.round = order;
+    constructor(round: number, sets: number, runs: number, cardCount: number, discard: boolean) {
+        this.round = round;
         this.sets = sets;
         this.runs = runs;
         this.cardCount = cardCount;

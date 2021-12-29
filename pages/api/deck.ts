@@ -5,7 +5,7 @@
 */
 
 import type { NextApiRequest, NextApiResponse } from 'next'
-import GameDeck from '../../game/utils/deck'
+import GameDeck from '../../game/models/GameDeck'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse){
     //figure out how many players are in the game to determine the deck count
