@@ -31,3 +31,22 @@ type Round = {
     cardCount: number, 
     discard: boolean
 }
+
+type Game = {
+    id: string,
+    players: Player[],
+    round: number,
+    active: boolean,
+    currentPlayer: {
+        isBuying: boolean,
+        discardNeeded: boolean,
+        player_id: string
+    }
+    game_name: string,
+    cards: Card[],
+    discards: Card[],
+    goal: Round,
+    host: string,
+    host_name: string,
+    host_icon: string
+}

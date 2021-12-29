@@ -1,4 +1,5 @@
 import Card from "./Card";
+import GameDeck from "./GameDeck";
 
 class Game {
     id: string;
@@ -14,7 +15,6 @@ class Game {
     cards: Card[];
     discards: Card[];
     goal: Round;
-    users: Player[];
     host: string;
     host_name: string;
     host_icon: string;
@@ -39,7 +39,6 @@ class Game {
             cardCount: 10,
             discard: true,
         };
-        this.users= [];
         this.host = host.id;
         this.host_name = host.username;
         this.host_icon = host.icon;
@@ -49,7 +48,17 @@ class Game {
      * Game Instance Functions
      */
     gameInit() {
-       // Create new game instance 
+        // Create new game instance
+        const playerCount = this.players.length; 
+        const game = new GameDeck(playerCount);
+        // Create game cards
+        const deck:Deck[] = [];
+        // populate array with decks based on player count
+        for( let i:number = 0;i < game.deckCount(playerCount); i++ ){
+            let count = i+1;
+            const cards = game.genDeck(count.toString());
+            deck.push(...cards);
+        }
     }
     turnStart(){
         // Start player turn
