@@ -1,9 +1,17 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { io, Socket } from "socket.io-client";
 import styles from '../assets/styles/Home.module.css'
 
 const Home: NextPage = () => {
+
+  const socket: Socket = io();
+
+  socket.on("connect", () => {
+    console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+  });
+
   return (
     <div className={styles.container}>
       <Head>
