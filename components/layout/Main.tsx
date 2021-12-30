@@ -1,23 +1,45 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef} from "react";
+import A11yDialog from 'a11y-dialog';
 import img from "../../public/profile_pic.jpg";
+import { signIn, useSession } from "next-auth/react"
 
 export default function Main() {
+  const { data: session } = useSession()
+
+  const tutorial = useRef(null);
+  const login = useRef(null);
+  const signup = useRef(null);
+
+  useEffect(() => {
+    // Update the document title using the browser API
+    if (null !== tutorial.current){
+      const tutorialDialog = new A11yDialog(tutorial.current)
+    }
+    if (null !== login.current){
+      const loginDialog = new A11yDialog(login.current)
+    }
+    if (null !== signup.current){
+      const signupDialog = new A11yDialog(signup.current)
+    }
+
+})
+
   return (
     <Fragment>
       <header className="relative animate-fade-in">
-        <nav className="absolute top-0 right-0 px-4 py-4 flex items-center">
+        <nav className="absolute px-4 py-4 right-0">
             {/* TODO: only show if logged in */}
             <Link href="/profile">  
-              <a className="sm:w-auto w-full flex justify-between items-center bg-white border-indigo-600 text-indigo-600 transition-all border-2 p-2 rounded-sm hover:bg-indigo-600 hover:text-white">
+              <a className="flex justify-end items-center bg-white border-indigo-600 text-indigo-600 transition-all border-2 rounded-sm hover:bg-indigo-600 hover:text-white">
                 <span className="text-xl px-3">Player 1</span>
-                <Image 
+                  <Image 
                     src={img}
                     alt="Player 1 profile image"
                     height="50"
                     width="50"
-                    className="rounded-sm"/>
+                    className="border-l-2 border-l-indigo-600"/>
               </a>
             </Link>
         </nav>
@@ -29,25 +51,36 @@ export default function Main() {
               rumi.js
             </h1>
           </div>
-          <div className="py-5">
+          <div className="py-5 mt-10">
             {/* TODO: only show if logged in */}
-            <ul className="list-none m-0 p-0 flex flex-col justify-center items-center">
-              <li>
+            <ul className="list-none m-0 px-6 flex flex-col justify-center items-center w-8/10">
+              <li className="w-full">
+                <button type="button" data-a11y-dialog-show="tutorial" className="w-full text-center block transition-all border-2 border-indigo-600 bg-indigo-600 hover:bg-white hover:text-indigo-600 py-2 px-4 text-white my-2">
+                  How to Play
+                </button>
+              </li>
+              {session && <><li className="w-full">
                 <Link href="/new-game">
-                  <a className="block transition-all border-2 border-indigo-600 bg-indigo-600 hover:bg-white hover:text-indigo-600 py-2 px-4 text-white my-2">
+                  <a className="block text-center transition-all border-2 border-indigo-600 hover:bg-indigo-600 py-2 px-4 text-indigo-600 hover:text-white my-2">
                     New Game
                   </a>
                 </Link>
-              </li>
-              <li>
-                <Link href="/new-game">
-                  <a className="block transition-all border-2 border-indigo-600 hover:bg-indigo-600 py-2 px-4 text-indigo-600 hover:text-white my-2">
-                    Join Game
-                  </a>
-                </Link>
-              </li>
+              </li><li className="w-full">
+                  <Link href="/new-game">
+                    <a className="block text-center transition-all border-2 border-indigo-600 hover:bg-indigo-600 py-2 px-4 text-indigo-600 hover:text-white my-2">
+                      Join Game
+                    </a>
+                  </Link>
+                </li></>}
+                {!session && <><li className="w-full">
+                  <button type="button" data-a11y-dialog-show="signup" className="w-full text-center block transition-all border-2 border-indigo-600 bg-indigo-600 hover:bg-white hover:text-indigo-600 py-2 px-4 text-white my-2">
+                    Sign Up
+                  </button>
+                  <button type="button" onClick={() => signIn()} className="w-full text-center block transition-all border-2 border-indigo-600 bg-indigo-600 hover:bg-white hover:text-indigo-600 py-2 px-4 text-white my-2">
+                    Log In
+                  </button>
+                </li></>}
             </ul>
-            {/* TODO: create sign-in/sign-up buttons */}
           </div>
         </section>
       </main>
@@ -61,6 +94,26 @@ export default function Main() {
             </a>
         </nav>
       </footer>
+      <div
+        ref={tutorial}
+        id="tutorial"
+        aria-labelledby="tutorial-title"
+        aria-hidden="true"
+        className="dialog-container"
+      >
+        <div data-a11y-dialog-hide className="dialog-overlay"></div>
+        <div role="document" className="dialog-content">
+          <div className="dialog-close">
+            <button type="button" data-a11y-dialog-hide aria-label="Close dialog">
+              &times;
+            </button>
+          </div>
+          <span id="tutorial-title" className="sr-only">Your dialog title</span>
+          <div className="dialog-content__main">
+            <p>Hello World</p>
+          </div>
+        </div>
+      </div>
     </Fragment>
   );
 }

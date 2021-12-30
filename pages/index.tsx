@@ -1,15 +1,10 @@
 import Main from 'components/layout/Main';
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router';
 import { Fragment } from 'react';
-import { io, Socket } from "socket.io-client";
 
 const Home: NextPage = () => {
-  const socket: Socket = io();
-
-  socket.on("connect", () => {
-    console.log(socket.id); // x8WIv7-mJelg7on_ALbx
-  });
 
   return (
     <Fragment>
@@ -24,3 +19,4 @@ const Home: NextPage = () => {
 }
 
 export default Home
+
