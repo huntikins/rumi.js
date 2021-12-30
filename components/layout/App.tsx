@@ -20,11 +20,6 @@ const App: React.FC = ({children}) => {
                   <a className="text-center text-white decoration-none text-sans text-xl">Join</a>
                 </Link> 
               </li>
-              <li className="p-2">
-                <Link href="/profile">
-                  <a className="text-center text-white decoration-none text-sans text-xl">Profile</a>
-                </Link> 
-              </li>
             </ul>
         </nav>
       </header>
