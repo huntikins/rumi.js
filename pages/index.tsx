@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   return (
     <Fragment>
       <Head>
-        <title>Rumi.js</title>
+        <title>rumi.js</title>
         <meta name="description" content="rumi for the people" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

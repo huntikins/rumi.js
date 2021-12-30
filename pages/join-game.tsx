@@ -1,10 +1,10 @@
-import Game from 'components/layout/Game';
+import App from 'components/layout/App';
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react';
 import { io, Socket } from "socket.io-client";
 
-const Play: NextPage = () => {
+const JoinGame: NextPage = () => {
   const socket: Socket = io();
 
   socket.on("connect", () => {
@@ -14,13 +14,15 @@ const Play: NextPage = () => {
   return (
     <Fragment>
       <Head>
-        <title>Play | rumi.js</title>
+        <title>Join Game | rumi.js</title>
         <meta name="description" content="rumi for the people" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Game />
+      <App>
+        <h1>Join Game</h1>
+      </App>
     </Fragment>
   )
 }
 
-export default Play
+export default JoinGame
