@@ -1,4 +1,4 @@
-import Card from "./Card";
+import { Card, Deck, Player, Round } from "../../interfaces";
 import GameDeck from "./GameDeck";
 
 class Game {

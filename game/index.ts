@@ -1,5 +1,6 @@
+import { Player } from '../interfaces';
 import {deal} from './actions';
-import roundSchema  from './round';
+import roundSchema  from './models/Round';
 
 // Shuffle and deal cards
 async function start(players: Player[], cardCount: number) {

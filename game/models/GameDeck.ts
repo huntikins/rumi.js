@@ -1,3 +1,4 @@
+import { Deck } from "../../interfaces";
 import Card from "./Card";
 
 class GameDeck {

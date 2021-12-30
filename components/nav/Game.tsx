@@ -1,8 +1,8 @@
-export default function Nav(){
+export default function Game(){
     return (
         <nav>
             <ul>
-                <li>hello</li>
+                <li>game on</li>
                 <li>world</li>
                 <li>Navstuff</li>
             </ul>

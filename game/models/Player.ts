@@ -1,3 +1,5 @@
+import { Deck, Round } from "../../interfaces";
+
 class Player {
     id: string;
     username: string;
