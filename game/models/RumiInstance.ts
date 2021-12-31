@@ -1,7 +1,6 @@
 import { Card, Deck, Player, Round } from "../../interfaces";
 import GameDeck from "./GameDeck";
-
-class Game {
+class RumiInstance {
     id: string;
     players: Player[];
     round: number;
@@ -19,8 +18,8 @@ class Game {
     host_name: string;
     host_icon: string;
 
-    constructor(id: string, game_name: string, host: {id:string, username: string, icon: string}){
-        this.id=id // WebSocket ID
+    constructor(game_name: string, host: {id:string, username: string, icon: string}){
+        this.id= '' // Firestore ID
         this.players= [];
         this.round= 0;
         this.active= false;
@@ -69,4 +68,4 @@ class Game {
 
 }
 
-export default Game
+export default RumiInstance;

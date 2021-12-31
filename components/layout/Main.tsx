@@ -1,18 +1,31 @@
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import A11yDialog from "a11y-dialog";
 import Tutorial from "components/tutorial/Tutorial";
+import EmailPasswordAuthSignUp from "components/auth/emailPasswordAuthSignin";
+import EmailPasswordAuthLogin from "components/auth/emailPasswordAuthLogin";
+import { AuthContext } from "context/AuthContext";
 
 export default function Main() {
 
   const tutorial = useRef(null);
+  const signup = useRef(null);
+  const signin = useRef(null);
 
   useEffect(() => {
     // Update the document title using the browser API
     if (null !== tutorial.current) {
       const tutorialDialog = new A11yDialog(tutorial.current);
     }
+    if (null !== signup.current) {
+      const signupDialog = new A11yDialog(signup.current);
+    }
+    if (null !== signin.current) {
+      const signinDialog = new A11yDialog(signin.current);
+    }
   });
+
+  const { currentUser } = useContext(AuthContext)
 
   return (
     <>
@@ -29,7 +42,6 @@ export default function Main() {
             </h1>
           </div>
           <div className="py-5 mt-10">
-            {/* TODO: only show if logged in */}
             <ul className="list-none m-0 px-6 flex flex-col justify-center items-center w-8/10">
               <li className="w-full">
                 <button
@@ -40,8 +52,9 @@ export default function Main() {
                   How to Play
                 </button>
               </li>
+              {currentUser && (<>
               <li className="w-full">
-                <Link href="/new-game">
+                <Link href="/play">
                   <a className="block text-center transition-all border-2 border-indigo-600 hover:bg-indigo-600 py-2 px-4 text-indigo-600 hover:text-white my-2">
                     New Game
                   </a>
@@ -53,7 +66,29 @@ export default function Main() {
                     Join Game
                   </a>
                 </Link>
-              </li>
+              </li></>)}
+              {!currentUser && (
+                <>
+                  <li className="w-full">
+                    <button
+                      type="button"
+                      data-a11y-dialog-show="signup"
+                      className="w-full text-center block transition-all border-2 border-indigo-600 bg-indigo-600 hover:bg-white hover:text-indigo-600 py-2 px-4 text-white my-2"
+                    >
+                      Sign Up
+                    </button>
+                  </li>
+                  <li className="w-full">
+                    <button
+                      type="button"
+                      data-a11y-dialog-show="signin"
+                      className="w-full text-center block transition-all border-2 border-indigo-600 bg-indigo-600 hover:bg-white hover:text-indigo-600 py-2 px-4 text-white my-2"
+                    >
+                      Sign In
+                    </button>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </section>
@@ -103,6 +138,58 @@ export default function Main() {
           </span>
           <div className="dialog-content__main">
             <Tutorial/>
+          </div>
+        </div>
+      </div>
+      <div
+        ref={signup}
+        id="signup"
+        aria-labelledby="signup-title"
+        aria-hidden="true"
+        className="dialog-container"
+      >
+        <div data-a11y-dialog-hide className="dialog-overlay"></div>
+        <div role="document" className="dialog-content">
+          <div className="dialog-close">
+            <button
+              type="button"
+              data-a11y-dialog-hide
+              aria-label="Close dialog"
+            >
+              &times;
+            </button>
+          </div>
+          <span id="signup-title" className="sr-only">
+            Your dialog title
+          </span>
+          <div className="dialog-content__main">
+            <EmailPasswordAuthSignUp/>
+          </div>
+        </div>
+      </div>
+      <div
+        ref={signin}
+        id="signin"
+        aria-labelledby="signin-title"
+        aria-hidden="true"
+        className="dialog-container"
+      >
+        <div data-a11y-dialog-hide className="dialog-overlay"></div>
+        <div role="document" className="dialog-content">
+          <div className="dialog-close">
+            <button
+              type="button"
+              data-a11y-dialog-hide
+              aria-label="Close dialog"
+            >
+              &times;
+            </button>
+          </div>
+          <span id="signin-title" className="sr-only">
+            Your dialog title
+          </span>
+          <div className="dialog-content__main">
+            <EmailPasswordAuthLogin />
           </div>
         </div>
       </div>

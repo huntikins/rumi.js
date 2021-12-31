@@ -1,15 +1,5 @@
 import '../assets/styles/globals.css'
-import type { ReactElement, ReactNode } from 'react'
-import type { NextPage } from 'next'
-import type { AppProps } from 'next/app'
-
-type NextPageWithLayout = NextPage & {
-  getLayout?: (page: ReactElement) => ReactNode
-}
-
-type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
-}
+import { AppPropsWithLayout } from 'interfaces'
 
 export default function Rumi({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available

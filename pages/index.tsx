@@ -1,7 +1,6 @@
 import Main from 'components/layout/Main';
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 
 const Home: NextPage = () => {

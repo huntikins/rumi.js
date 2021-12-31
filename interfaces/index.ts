@@ -66,3 +66,8 @@ export type Game = {
     host_name: string,
     host_icon: string
 }
+export interface PaneProps {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+}

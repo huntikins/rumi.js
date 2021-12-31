@@ -5,7 +5,8 @@
     "jsx": "preserve",
     "lib": [
       "dom",
-      "es2017"
+      "es2017",
+      "ES2020"
     ],
     "baseUrl": ".",
     "moduleResolution": "node",
@@ -35,5 +36,5 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "pages/api/auth/[...nextauth].js"  ]
+, "pages/api/auth/[...nextauth].js", "pages/play/index.jsx", "pages/api/entry/[id].js", "pages/api/entry/index.js"  ]
 }
