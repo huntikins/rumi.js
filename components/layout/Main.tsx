@@ -1,8 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import A11yDialog from "a11y-dialog";
-import img from "../../public/profile_pic.jpg";
+import Tutorial from "components/tutorial/Tutorial";
 
 export default function Main() {
 
@@ -103,7 +102,7 @@ export default function Main() {
             Your dialog title
           </span>
           <div className="dialog-content__main">
-            <p>Hello World</p>
+            <Tutorial/>
           </div>
         </div>
       </div>

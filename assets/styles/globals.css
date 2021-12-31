@@ -1,3 +1,5 @@
+@import "node_modules/@glidejs/glide/dist/css/glide.core.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -49,18 +51,11 @@
         position: relative;
         background-color: white;
         padding: .5rem;
-        min-height: 70%;
-        min-width: 70%;
+        width: 100vh;
+        height: 100vh;
     }
 
     .dialog-content__main {
         padding: 2rem;
-    }
-
-    @media (max-width: 640px) {
-        .dialog-content {
-            min-height: 100%;
-            min-width: 100%;
-        }
     }
 }
