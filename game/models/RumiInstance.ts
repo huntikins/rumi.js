@@ -5,6 +5,7 @@ class RumiInstance {
     players: Player[];
     round: number;
     active: boolean;
+    users: Array<string>
     currentPlayer: {
         isBuying: boolean,
         discardNeeded: boolean,
@@ -22,6 +23,7 @@ class RumiInstance {
         this.id= '' // Firestore ID
         this.players= [];
         this.round= 0;
+        this.users=[]
         this.active= false;
         this.currentPlayer= {
             isBuying: false,

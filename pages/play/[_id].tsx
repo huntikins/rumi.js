@@ -1,4 +1,5 @@
-import Game from "components/layout/Game";
+import Board from "components/game/board";
+import Game from "components/layout/App";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -6,8 +7,16 @@ import { domain } from '../../utils/url';
 
 const Play: NextPage = ({gameInstance}) => {
 
-  const [loading, isLoading] = useState(true)
-console.log(gameInstance)
+const [loading, isLoading] = useState(true)
+const [rumi, setRumi] = useState({})
+
+useEffect(() => {
+  setRumi(gameInstance)
+  isLoading(false)
+}, [rumi])
+
+console.log(rumi)
+
   return (
     <>
       <Head>
@@ -43,6 +52,7 @@ console.log(gameInstance)
           </div>
         </section>)
         }
+        {!loading && (<Board game={rumi}/>)}
       </Game>
     </>
   );
