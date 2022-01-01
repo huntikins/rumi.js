@@ -1,28 +1,14 @@
+import { updateCurrentUser } from "@firebase/auth";
 import RumiInstance from "game/models/RumiInstance";
+import { AuthContext } from "context/AuthContext";
 import Head from "next/head";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
+import GameOptions from '../../components/game/lobby/GameOptions';
 
-import Game from '../../components/layout/Game'
+import Game from "../../components/layout/Game";
 
 const Play = () => {
-
- 
-  useEffect(async () => {
-    const host = {id:'<player_id>', username: 'testperson', icon: 'string'}
-
-    const rumi = new RumiInstance('test', host)
-  
-    const response = await fetch('/api/rooms', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(rumi)
-    })
-    const data = await response.json()
-    console.log(data)
-
-  })
+  const { currentUser } = useContext(AuthContext);
 
   return (
     <>
@@ -57,6 +43,7 @@ const Play = () => {
             <span>Creating Room...</span>
           </div>
         </section>
+        <GameOptions />
       </Game>
     </>
   );

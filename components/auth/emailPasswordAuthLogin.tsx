@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { useRouter } from "next/router"
-import { auth } from "../../utils/firebase/firebase"
+import { auth } from "../../utils/firebase"
 import { signInWithEmailAndPassword } from "firebase/auth"
 import Link from "next/link"
 
@@ -64,11 +64,6 @@ const EmailPasswordAuthLogin = () => {
           >
             Sign In
           </button>
-          <Link href="/signup">
-            <a className="transition-all duration-500 cursor-pointer inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
-              Sign up?
-            </a>
-          </Link>
         </div>
       </form>
     </div>

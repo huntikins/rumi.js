@@ -5,6 +5,8 @@ import Tutorial from "components/tutorial/Tutorial";
 import EmailPasswordAuthSignUp from "components/auth/emailPasswordAuthSignin";
 import EmailPasswordAuthLogin from "components/auth/emailPasswordAuthLogin";
 import { AuthContext } from "context/AuthContext";
+import { signOut } from "firebase/auth";
+import router from "next/router";
 
 export default function Main() {
 
@@ -27,11 +29,21 @@ export default function Main() {
 
   const { currentUser } = useContext(AuthContext)
 
+  console.log(currentUser)
+
+  function handleSignOut(){
+    signOut(currentUser).then(() => {
+      router.push('/')
+    }).catch((error) => {
+      throw new Error(error)
+    })
+  }
+
   return (
     <>
       <header className="relative animate-fade-in">
         <nav className="absolute px-4 py-4 right-0">
-          {/* TODO: Convert to input box */}
+          <button onClick={handleSignOut}>Sign Out</button>
         </nav>
       </header>
       <main className="h-screen flex justify-center items-center animate-fade-in">
@@ -61,7 +73,7 @@ export default function Main() {
                 </Link>
               </li>
               <li className="w-full">
-                <Link href="/new-game">
+                <Link href="/join-game">
                   <a className="block text-center transition-all border-2 border-indigo-600 hover:bg-indigo-600 py-2 px-4 text-indigo-600 hover:text-white my-2">
                     Join Game
                   </a>
@@ -123,7 +135,7 @@ export default function Main() {
         className="dialog-container"
       >
         <div data-a11y-dialog-hide className="dialog-overlay"></div>
-        <div role="document" className="dialog-content">
+        <div role="document" className="dialog-content bg-white">
           <div className="dialog-close">
             <button
               type="button"
@@ -149,7 +161,7 @@ export default function Main() {
         className="dialog-container"
       >
         <div data-a11y-dialog-hide className="dialog-overlay"></div>
-        <div role="document" className="dialog-content">
+        <div role="document" className="dialog-content bg-white">
           <div className="dialog-close">
             <button
               type="button"
@@ -175,7 +187,7 @@ export default function Main() {
         className="dialog-container"
       >
         <div data-a11y-dialog-hide className="dialog-overlay"></div>
-        <div role="document" className="dialog-content">
+        <div role="document" className="dialog-content bg-white">
           <div className="dialog-close">
             <button
               type="button"
@@ -193,6 +205,7 @@ export default function Main() {
           </div>
         </div>
       </div>
+
     </>
   );
 }

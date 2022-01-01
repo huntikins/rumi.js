@@ -10,7 +10,16 @@ const Game: React.FC = ({children}) => {
             <a className="text-center text-white decoration-none text-sans text-3xl">rumi.js</a>
           </Link>
             <ul className="flex list-none m-0 p-0">
-              
+              <li className="p-2">
+                  <Link href="/play">
+                    <a className="text-center text-white decoration-none text-sans text-xl">New</a>
+                  </Link>  
+                </li>
+                <li className="p-2">
+                  <Link href="/join-game">
+                    <a className="text-center text-white decoration-none text-sans text-xl">Join</a>
+                  </Link> 
+                </li>
             </ul>
         </nav>
       </header>

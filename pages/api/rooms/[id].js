@@ -5,6 +5,7 @@ export default async (req, res) => {
 
   try {
     if (req.method === 'PUT') {
+      console.log(req.body)
       await db.collection('rooms').doc(id).update({
         ...req.body,
         updated: new Date().toISOString(),

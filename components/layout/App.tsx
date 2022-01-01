@@ -11,7 +11,7 @@ const App: React.FC = ({children}) => {
           </Link>
             <ul className="flex list-none m-0 p-0">
               <li className="p-2">
-                <Link href="/new-game">
+                <Link href="/play">
                   <a className="text-center text-white decoration-none text-sans text-xl">New</a>
                 </Link>  
               </li>
