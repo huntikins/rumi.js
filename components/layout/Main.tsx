@@ -5,7 +5,7 @@ import Tutorial from "components/tutorial/Tutorial";
 import EmailPasswordAuthSignUp from "components/auth/emailPasswordAuthSignin";
 import EmailPasswordAuthLogin from "components/auth/emailPasswordAuthLogin";
 import { AuthContext } from "context/AuthContext";
-import { signOut } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import router from "next/router";
 
 export default function Main() {
@@ -32,7 +32,8 @@ export default function Main() {
   console.log(currentUser)
 
   function handleSignOut(){
-    signOut(currentUser).then(() => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
       router.push('/')
     }).catch((error) => {
       throw new Error(error)
@@ -41,11 +42,12 @@ export default function Main() {
 
   return (
     <>
-      <header className="relative animate-fade-in">
+      
+      {currentUser && (<header className="relative animate-fade-in">
         <nav className="absolute px-4 py-4 right-0">
           <button onClick={handleSignOut}>Sign Out</button>
         </nav>
-      </header>
+      </header>)}
       <main className="h-screen flex justify-center items-center animate-fade-in">
         <section>
           <div>

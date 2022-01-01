@@ -35,11 +35,13 @@ function GameOptions() {
       icon: `https://avatars.dicebear.com/api/adventurer-neutral/${currentUser.uid}.svg`,
     };
 
-    const { roomName } = e.target.elements;
+    const { roomName, player_count } = e.target.elements;
 
     const room = roomName.value !== null ? roomName.value : "New Game";
 
-    const rumi = new RumiInstance(room, host);
+    const playerCount = player_count.value !== null ? player_count.value : 4;
+
+    const rumi = new RumiInstance(playerCount, room, host);
 
     const body = {
       method: "POST",
@@ -50,15 +52,24 @@ function GameOptions() {
       body: JSON.stringify(rumi),
     };
 
-    fetch("/api/rooms", body)
+    fetch("/api/users/" + currentUser.uid)
       .then((res) => {
-        if (!res.ok) {
-          throw res;
-        }
-        return res.text();
+        return res.json();
       })
       .then((data) => {
-          setTimeout(()=>router.push(`/play/${data}`), 1000)
+        fetch("/api/rooms", body)
+          .then((res) => {
+            if (!res.ok) {
+              throw res;
+            }
+            return res.text();
+          })
+          .then((data) => {
+            setTimeout(() => router.push(`/play/${data}`), 1000);
+          })
+          .catch((error) => {
+            throw error;
+          });
       })
       .catch((error) => {
         throw error;
@@ -95,6 +106,21 @@ function GameOptions() {
                   id="roomName"
                   type="text"
                   placeholder="my favorite game"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="player_count"
+                >
+                  Number of Players
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  name="player_count"
+                  id="player_count"
+                  type="number"
+                  min="2"
                 />
               </div>
               <button

@@ -1,6 +1,6 @@
 import { Deck, Round } from "../../interfaces";
 
-class Player {
+class PlayerClass {
     id: string;
     username: string;
     hand: Deck[];
@@ -57,4 +57,4 @@ class Player {
 
 }
 
-export default Player;
+export default PlayerClass;

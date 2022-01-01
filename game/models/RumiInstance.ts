@@ -1,29 +1,31 @@
 import { Card, Deck, Player, Round } from "../../interfaces";
 import GameDeck from "./GameDeck";
+import PlayerClass from "./Player";
+import roundSchema from "./Round";
 class RumiInstance {
     id: string;
     players: Player[];
+    player_count: number;
     round: number;
     active: boolean;
-    users: Array<string>
     currentPlayer: {
         isBuying: boolean,
         discardNeeded: boolean,
         player_id: string
     }
     game_name: string;
-    cards: Card[];
+    cards: Deck[];
     discards: Card[];
     goal: Round;
     host: string;
     host_name: string;
     host_icon: string;
 
-    constructor(game_name: string, host: {id:string, username: string, icon: string}){
+    constructor(player_count: number, game_name: string, host: {id:string, username: string, icon: string}){
         this.id= '' // Firestore ID
         this.players= [];
+        this.player_count=player_count
         this.round= 0;
-        this.users=[]
         this.active= false;
         this.currentPlayer= {
             isBuying: false,
@@ -31,15 +33,9 @@ class RumiInstance {
             player_id: ''
         };
         this.game_name= game_name;
-        this.cards = []
+        this.cards = this.gameInit();
         this.discards = []
-        this.goal= {
-            round: 1,
-            sets: 2,
-            runs: 0,
-            cardCount: 10,
-            discard: true,
-        };
+        this.goal = roundSchema[0];
         this.host = host.id;
         this.host_name = host.username;
         this.host_icon = host.icon;
@@ -50,22 +46,9 @@ class RumiInstance {
      */
     gameInit() {
         // Create new game instance
-        const playerCount = this.players.length; 
-        const game = new GameDeck(playerCount);
-        // Create game cards
-        const deck:Deck[] = [];
-        // populate array with decks based on player count
-        for( let i:number = 0;i < game.deckCount(playerCount); i++ ){
-            let count = i+1;
-            const cards = game.genDeck(count.toString());
-            deck.push(...cards);
-        }
-    }
-    turnStart(){
-        // Start player turn
-    }
-    turnEnd(){
-        // Evaluate end of turn
+        const game = new GameDeck(+this.player_count);
+        game.genCards(this.id)
+        return [...game.cards];
     }
 
 }

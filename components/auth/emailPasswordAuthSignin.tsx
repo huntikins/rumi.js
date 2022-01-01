@@ -1,28 +1,49 @@
-import React, { useCallback } from "react"
-import { useRouter } from "next/router"
-import { auth } from "../../utils/firebase"
-import { createUserWithEmailAndPassword } from "firebase/auth"
-
-import Link from "next/link"
+import React, { useCallback } from "react";
+import { useRouter } from "next/router";
+import { auth } from "../../utils/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import User from "utils/models/User";
 
 const EmailPasswordAuthSignUp = () => {
-  const Router = useRouter()
+  const Router = useRouter();
 
   const signupHandler = useCallback(
     async (event) => {
-      console.log("signupHandler called")
-      event.preventDefault()
-      const { email, password } = event.target.elements
+      console.log("signupHandler called");
+      event.preventDefault();
+      const { email, password } = event.target.elements;
       try {
-        console.log(email.value, password.value)
-        await createUserWithEmailAndPassword(auth, email.value, password.value)
-        Router.push("/")
+        console.log(email.value, password.value);
+        const {user} = await createUserWithEmailAndPassword(
+          auth,
+          email.value,
+          password.value
+        );
+        const defaultUsername = user.email.substring(
+          0,
+          user.email.lastIndexOf("@")
+        );
+        const username = user.displayName ? user.displayName : defaultUsername;
+        const body = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            ...new User(user.uid, user.email, username),
+          }),
+        };
+        const response = await fetch("/api/users", body);
+        const userData = await response.text();
+        console.log(userData)
+        Router.push("/");
       } catch (error) {
-        alert(error)
+        console.log(error);
       }
     },
     [Router]
-  )
+  );
 
   return (
     <div>
@@ -70,7 +91,7 @@ const EmailPasswordAuthSignUp = () => {
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default EmailPasswordAuthSignUp
+export default EmailPasswordAuthSignUp;

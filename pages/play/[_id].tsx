@@ -13,7 +13,7 @@ const [rumi, setRumi] = useState({})
 useEffect(() => {
   setRumi(gameInstance)
   isLoading(false)
-}, [rumi])
+})
 
 console.log(rumi)
 

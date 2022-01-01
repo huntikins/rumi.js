@@ -10,6 +10,13 @@ class GameDeck {
     this.cards = [];
     this.playerCount = playerCount;
     this.decksUsed = this.deckCount(this.playerCount);
+    this.genCards
+  }
+
+  genCards(id:string){
+    for(let i = 0; i<this.decksUsed;i++){
+      this.genDeck(id)
+    }
   }
 
   genDeck(id: string) {

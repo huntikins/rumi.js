@@ -1,7 +1,12 @@
-function Card({card}: any){
+import Image from "next/image";
+
+function Card({card, type}: any){
+    const height = type == 'player' ? 100 : 50;
+    const width = type == 'player' ? 70 : 35;
+
     return (
-        <li className="card-grid__list--item">
-            <img src={card.img} alt={card.alt} />
+        <li className="card-grid__list--item px-2">
+            <Image src={card.img} alt={card.alt} width={width} height={height}/>
         </li>
     )
 }
