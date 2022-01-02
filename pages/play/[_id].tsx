@@ -3,19 +3,29 @@ import Game from "components/layout/App";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { domain } from '../../utils/url';
+import { doc, onSnapshot } from "firebase/firestore";
+import { useRouter } from "next/router";
+import { db } from "../../utils/firebase";
 
-const Play: NextPage = ({gameInstance}) => {
-
+const Play: NextPage = () => {
+const router = useRouter()
+const _id = router.query._id
 const [loading, isLoading] = useState(true)
-const [rumi, setRumi] = useState({})
+const [rumi, setRumi] = useState()
 
 useEffect(() => {
-  setRumi(gameInstance)
-  isLoading(false)
-})
+    if(!_id){
+      return
+    }
+    const unsub = onSnapshot(doc(db, "rooms", _id), (doc) => {
+        setRumi(doc.data());
+        isLoading(false)
+    });
 
-console.log(rumi)
+    return () => {
+      unsub()
+    }
+},[])
 
   return (
     <>
@@ -48,7 +58,7 @@ console.log(rumi)
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               ></path>
             </svg>
-            <span>Loading {gameInstance.game_name}</span>
+            <span>Loading...</span>
           </div>
         </section>)
         }
@@ -57,26 +67,5 @@ console.log(rumi)
     </>
   );
 };
-
-export async function getServerSideProps(context: { params: { _id: any; }; }) {
-  const _id = context.params._id
-
-  const res = await fetch(`${domain}/api/rooms/` + _id)
-  const gameInstance = await res.json()
-
-  if (!gameInstance) {
-    return {
-      notFound: true,
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
-
-  return {
-    props: { gameInstance }, // will be passed to the page component as props
-  }
-}
 
 export default Play;

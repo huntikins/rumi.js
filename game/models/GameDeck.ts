@@ -25,25 +25,24 @@ class GameDeck {
     this.genSet("diamonds", id);
     this.genSet("clubs", id);
     this.genSet("hearts", id);
-    this.cards.push(
-      new Card(
-        this.generateId("joker", "black", id),
-        "joker",
-        "black",
-        50,
-        `../img/cards/default/black_joker.png`,
-        `../img/cards/default/back.png`
-      )
+    this.cards.push({...new Card(
+      this.generateId("joker", "black", id),
+      "joker",
+      "black",
+      50,
+      `../img/cards/default/black_joker.png`,
+      `../img/cards/default/back.png`
+    )}
     );
     this.cards.push(
-      new Card(
+      {...new Card(
         this.generateId("joker", "red", id),
         "joker",
         "red",
         50,
         `../img/cards/default/red_joker.png`,
         `../img/cards/default/back.png`
-      )
+      )}
     );
     return this.cards;
   }
@@ -79,14 +78,14 @@ class GameDeck {
           cardPoint = 5;
       }
       this.cards.push(
-        new Card(
+        {...new Card(
           this.generateId(cardValue, cardSuit, id),
           cardValue,
           cardSuit,
           cardPoint,
           `../img/cards/default/${cardValue}_of_${cardSuit}.png`,
           `../img/cards/default/back.png`
-        )
+        )}
       );
     }
   }

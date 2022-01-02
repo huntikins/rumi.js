@@ -2,9 +2,14 @@ import A11yDialog from "a11y-dialog";
 import RumiInstance from "game/models/RumiInstance";
 import { useContext, useEffect, useRef } from "react";
 import { AuthContext } from "context/AuthContext";
-import router from "next/router";
+import { collection, addDoc, query, where, getDocs, updateDoc, doc as fbDoc  } from "firebase/firestore";
+import { db } from "../../../utils/firebase";
+import {useRouter} from "next/router";
 
 function GameOptions() {
+
+  const router = useRouter()
+
   const { currentUser } = useContext(AuthContext);
 
   const defaultUsername = currentUser.email.substring(
@@ -23,7 +28,7 @@ function GameOptions() {
     }
   });
 
-  function createRoom(e: any) {
+  async function createRoom(e: any) {
     e.preventDefault();
     gameOptionsDialog.hide();
 
@@ -52,28 +57,25 @@ function GameOptions() {
       body: JSON.stringify(rumi),
     };
 
-    fetch("/api/users/" + currentUser.uid)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        fetch("/api/rooms", body)
-          .then((res) => {
-            if (!res.ok) {
-              throw res;
-            }
-            return res.text();
-          })
-          .then((data) => {
-            setTimeout(() => router.push(`/play/${data}`), 1000);
-          })
-          .catch((error) => {
-            throw error;
-          });
-      })
-      .catch((error) => {
-        throw error;
-      });
+      try {
+        const doc = query(collection(db, "users"), where("uid", "==", currentUser.uid));
+        const querySnapshot = await getDocs(doc);
+        querySnapshot.forEach(async (doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          const player = doc.data();
+          rumi.players.push(player)
+          console.log(rumi)
+          try {
+            const roomsDoc = await addDoc(collection(db, "rooms"), {...rumi})
+            //const update = await updateDoc(fbDoc(db, "rooms", roomsDoc.id), { id: roomsDoc.id})
+            router.push(`/play/${roomsDoc.id}`)
+          } catch {
+            console.error("Error adding document",{...rumi} );
+          }
+        });
+      } catch (e) {
+        console.error("Error finding user: ", e);
+      }
   }
 
   return (

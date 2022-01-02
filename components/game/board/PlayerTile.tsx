@@ -37,24 +37,24 @@ function PlayerTile({game}) {
           <div className={`player-title__cards--runs flex flex-col text-center ${!game.goal.runs ? 'hidden' : ''}`}>
             <h4>Runs</h4>
             <div className="flex">
-              {[...Array(game.goal.runs)].map(() => (
-                <Hand cards={placeholderCard(4)} />
+              {[...Array(game.goal.runs)].map((_, index) => (
+                <Hand cards={placeholderCard(4)} key={index+game.goal.runs + 'runs'} />
               ))}
             </div>
           </div>
           <div className={`player-title__cards--sets flex flex-col text-center ${!game.goal.sets ? 'hidden' : ''}`}>
             <h4>Sets</h4>
             <div className="flex">
-              {[...Array(game.goal.sets)].map(() => (
-                <Hand cards={placeholderCard(3)} />
+              {[...Array(game.goal.sets)].map((_, index) => (
+                <Hand cards={placeholderCard(3)}  key={index+game.goal.sets + 'sets'} />
               ))}
             </div>
           </div>
         </div>
       </div>
       <div className="player-title__cards--discards px-2">
-        {[...Array(game.goal.sets)].map(() => (
-          <Hand cards={game.discards[0]} />
+        {[...Array(game.goal.sets)].map((_, index) => (
+          <Hand cards={game.discards[0]} key={index + 'discard'} />
         ))}
       </div>
     </div>
