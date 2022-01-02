@@ -2,30 +2,46 @@ import Board from "components/game/board";
 import Game from "components/layout/App";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useState } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
+import { useContext, useEffect, useState } from "react";
+import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { db } from "../../utils/firebase";
+import { getAuth } from "firebase/auth";
 
 const Play: NextPage = () => {
-const router = useRouter()
-const _id = router.query._id
-const [loading, isLoading] = useState(true)
-const [rumi, setRumi] = useState()
+  const { currentUser } = getAuth();
+  const router = useRouter();
+  const _id = router.query._id;
+  const [loading, isLoading] = useState(true);
+  const [rumi, setRumi] = useState();
 
-useEffect(() => {
-    if(!_id){
-      return
+  const roomsRef = doc(db, "rooms", _id);
+
+  useEffect(() => {
+    if (!_id) {
+      return;
     }
-    const unsub = onSnapshot(doc(db, "rooms", _id), (doc) => {
-        setRumi(doc.data());
-        isLoading(false)
+    const unsubRoom = onSnapshot(roomsRef, (doc) => {
+      setRumi(doc.data());
+      isLoading(false);
     });
 
     return () => {
-      unsub()
+      unsubRoom();
+    };
+  }, []);
+
+  if (rumi) {
+    const playerExists = rumi.players.some(
+      (user: { uid: any }) => user.uid == currentUser.uid
+    );
+    if(!playerExists){
+      getDoc(doc(db, "users", currentUser.uid)).then(res=>{
+        console.log(res.data())
+      })
     }
-},[])
+    console.log(playerExists);
+  }
 
   return (
     <>
@@ -35,34 +51,34 @@ useEffect(() => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Game>
-        {
-         loading && (<section className="my-12 flex justify-center items-center">
-          <div className="flex justify-center items-center text-indigo-600">
-            <svg
-              className="animate-spin -ml-1 mr-3 h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-            <span>Loading...</span>
-          </div>
-        </section>)
-        }
-        {!loading && (<Board game={rumi}/>)}
+        {loading && (
+          <section className="my-12 flex justify-center items-center">
+            <div className="flex justify-center items-center text-indigo-600">
+              <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              <span>Loading...</span>
+            </div>
+          </section>
+        )}
+        {!loading && <Board game={rumi} />}
       </Game>
     </>
   );

@@ -1,9 +1,10 @@
+import A11yDialog from "a11y-dialog";
 import GameCard from "components/card/GameCard";
 import App from "components/layout/App";
 import { collection, getDocs } from "firebase/firestore";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { db } from "utils/firebase";
 
 const JoinGame: NextPage = () => {
@@ -16,7 +17,7 @@ const JoinGame: NextPage = () => {
       setGames((games) => [...games, doc.data()]);
       isLoading(false);
     });
-
+    
     return () => {
       querySnapshot;
     };
@@ -31,8 +32,8 @@ const JoinGame: NextPage = () => {
       </Head>
       <App>
         <section>
-          <h1>Choose an open lobby</h1>
-          <div className="flex">
+          <h1 className="text-center text-4xl my-4">Choose a Lobby</h1>
+          <div className="flex flex-wrap">
             {loading && (
               <section className="my-12 flex justify-center items-center">
                 <div className="flex justify-center items-center text-indigo-600">

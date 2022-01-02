@@ -48,15 +48,6 @@ function GameOptions() {
 
     const rumi = new RumiInstance(playerCount, room, host);
 
-    const body = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(rumi),
-    };
-
       try {
         const doc = query(collection(db, "users"), where("uid", "==", currentUser.uid));
         const querySnapshot = await getDocs(doc);
@@ -64,10 +55,9 @@ function GameOptions() {
           // doc.data() is never undefined for query doc snapshots
           const player = doc.data();
           rumi.players.push(player)
-          console.log(rumi)
           try {
             const roomsDoc = await addDoc(collection(db, "rooms"), {...rumi})
-            //const update = await updateDoc(fbDoc(db, "rooms", roomsDoc.id), { id: roomsDoc.id})
+            const update = await updateDoc(fbDoc(db, "rooms", roomsDoc.id), { id: roomsDoc.id})
             router.push(`/play/${roomsDoc.id}`)
           } catch {
             console.error("Error adding document",{...rumi} );
