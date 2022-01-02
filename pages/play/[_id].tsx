@@ -36,15 +36,16 @@ const Play: NextPage = () => {
     const unsubRoom = onSnapshot(roomsRef, (doc) => {
       setRumi(doc.data());
       isGameLoading(false);
-      if (rumi !== null && rumi.players.length == +rumi.player_count) {
-        isLoading(false);
-      }
     });
-
+      if (rumi !== null) {
+        if (rumi.players.length == rumi.player_count) {
+          isLoading(false);
+        }
+      }
     return () => {
       unsubRoom();
     };
-  }, []);
+  }, [gameLoading]);
 
   if (rumi) {
     const playerExists = rumi.players.some(
@@ -102,16 +103,16 @@ const Play: NextPage = () => {
               </svg>
               <h1>Waiting for Players</h1>
             </div>
-            {!gameLoading && (<>
-              <p className="mt-4">
-                {rumi.players.length} / {rumi.player_count}
-              </p>
-              <div>
-                {rumi.host === currentUser.uid && (
-                  <StartGame game={rumi}/>
-                )}
-              </div>
-            </>)}
+            {!gameLoading && (
+              <>
+                <p className="mt-4">
+                  {rumi.players.length} / {rumi.player_count}
+                </p>
+                <div>
+                  {rumi.host === currentUser.uid && <StartGame game={rumi} />}
+                </div>
+              </>
+            )}
           </section>
         )}
         {!loading && <Board game={rumi} />}
