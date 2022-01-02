@@ -1,4 +1,4 @@
-import Play from "../actions/Play";
+import PlayHand from "../actions/Play";
 import Buy from "../actions/Buy";
 import Deal from "../actions/Deal";
 import Discard from "../actions/Discard";
@@ -76,7 +76,7 @@ function Board({ game }) {
             }
             </div>
             <div>
-                <div><Play /></div>
+                <div><PlayHand /></div>
                 <div><Discard /></div>
             </div>
         </div>

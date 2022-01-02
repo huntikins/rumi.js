@@ -12,7 +12,7 @@ function GameCard({ game }) {
   const joinRoom = useRef();
 
   function handleRoomJoin() {
-      router.push(`/play/${game.id}`)
+    router.push(`/play/${game.id}`);
   }
 
   useEffect(() => {
@@ -30,26 +30,28 @@ function GameCard({ game }) {
         onClick={() => {
           dialog.show();
         }}
-        className="room bg-indigo-300 rounded-xl shadow-md p-3 m-2 flex justify-start items-center hover:cursor-pointer"
+        className="room bg-indigo-300 rounded-xl shadow-md p-3 m-2 hover:cursor-pointer"
       >
-        <div className="flex justify-center items-center">
-          <Image
-            className="rounded-xl"
-            src={game.host_icon}
-            height="50"
-            width="50"
-            loading="eager"
-            blurDataURL={game.host_icon}
-            placeholder="blur"
-          />
-        </div>
-        <div className="room-data ml-4 p-1">
-          <div className="room-data_title">
-            <h3>{game.name_name}</h3>
-            <h4>Host: {game.host_name}</h4>
+        <h2 className="text-center py-2 mb-2 bg-white text-indigo-600 rounded-xl">{game.game_name}</h2>
+        <div className="flex justify-start items-center">
+          <div className="flex justify-center items-center">
+            <Image
+              className="rounded-xl"
+              src={game.host_icon}
+              height="75"
+              width="75"
+              loading="eager"
+              blurDataURL={game.host_icon}
+              placeholder="blur"
+            />
           </div>
-          <div className="room-data_info">
-            Players: {game.players.length} / {game.player_count}
+          <div className="room-data ml-4 p-4 bg-white text-indigo-600 rounded-xl">
+            <div className="room-data_title">
+              <h3>{game.host_name}</h3>
+            </div>
+            <div className="room-data_info text-center">
+              {game.players.length} / {game.player_count}
+            </div>
           </div>
         </div>
       </article>

@@ -55,7 +55,7 @@ function GameOptions() {
         querySnapshot.forEach(async (doc) => {
           // doc.data() is never undefined for query doc snapshots
           const player = doc.data();
-          rumi.players.push({...new PlayerClass(player.id, player.username, player.avatar)})
+          rumi.players.push({...new PlayerClass(player.id, player.username, player.avatar, player.uid)})
           try {
             const roomsDoc = await addDoc(collection(db, "rooms"), {...rumi})
             const update = await updateDoc(fbDoc(db, "rooms", roomsDoc.id), { id: roomsDoc.id})

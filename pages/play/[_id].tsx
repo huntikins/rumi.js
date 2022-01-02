@@ -2,19 +2,30 @@ import Board from "components/game/board";
 import Game from "components/layout/App";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useContext, useEffect, useState } from "react";
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { useRouter } from "next/router";
 import { db } from "../../utils/firebase";
 import { getAuth } from "firebase/auth";
 import PlayerClass from "game/models/Player";
+import StartGame from "components/game/actions/StartGame";
 
 const Play: NextPage = () => {
   const { currentUser } = getAuth();
   const router = useRouter();
   const _id = router.query._id;
   const [loading, isLoading] = useState(true);
-  const [rumi, setRumi] = useState();
+  const [gameLoading, isGameLoading] = useState(true);
+  const [rumi, setRumi] = useState(null);
 
   const roomsRef = doc(db, "rooms", _id);
 
@@ -24,7 +35,10 @@ const Play: NextPage = () => {
     }
     const unsubRoom = onSnapshot(roomsRef, (doc) => {
       setRumi(doc.data());
-      isLoading(false);
+      isGameLoading(false);
+      if (rumi !== null && rumi.players.length == +rumi.player_count) {
+        isLoading(false);
+      }
     });
 
     return () => {
@@ -36,20 +50,23 @@ const Play: NextPage = () => {
     const playerExists = rumi.players.some(
       (user: { uid: any }) => user.uid == currentUser.uid
     );
-    if(!playerExists){
-      getDocs(query(collection(db, "users"), where("uid", "==", currentUser.uid))).then(res=>{
+    if (!playerExists) {
+      getDocs(
+        query(collection(db, "users"), where("uid", "==", currentUser.uid))
+      ).then((res) => {
         res.forEach(async (fbDoc) => {
-          const user = fbDoc.data()
+          const user = fbDoc.data();
           const roomUpdate = await updateDoc(roomsRef, {
-            players: arrayUnion({...new PlayerClass(user.id, user.username, user.avatar)})
-          })
+            players: arrayUnion({
+              ...new PlayerClass(user.id, user.username, user.avatar, user.uid),
+            }),
+          });
           const userUpdate = await updateDoc(doc(db, "users", user.id), {
-            rooms: arrayUnion(rumi.id)
-          })
-        })
-      })
+            rooms: arrayUnion(rumi.id),
+          });
+        });
+      });
     }
-    console.log(playerExists);
   }
 
   return (
@@ -61,8 +78,8 @@ const Play: NextPage = () => {
       </Head>
       <Game>
         {loading && (
-          <section className="my-12 flex justify-center items-center">
-            <div className="flex justify-center items-center text-indigo-600">
+          <section className="text-indigo-600 my-12 flex justify-center items-center flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="flex items-center justify-center">
               <svg
                 className="animate-spin -ml-1 mr-3 h-5 w-5"
                 xmlns="http://www.w3.org/2000/svg"
@@ -83,8 +100,18 @@ const Play: NextPage = () => {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
-              <span>Loading...</span>
+              <h1>Waiting for Players</h1>
             </div>
+            {!gameLoading && (<>
+              <p className="mt-4">
+                {rumi.players.length} / {rumi.player_count}
+              </p>
+              <div>
+                {rumi.host === currentUser.uid && (
+                  <StartGame game={rumi}/>
+                )}
+              </div>
+            </>)}
           </section>
         )}
         {!loading && <Board game={rumi} />}

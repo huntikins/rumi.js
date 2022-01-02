@@ -2,6 +2,7 @@ import { Deck, Round } from "../../interfaces";
 
 class PlayerClass {
     id: string;
+    uid: string;
     username: string;
     hand: Deck[];
     score: number;
@@ -10,8 +11,9 @@ class PlayerClass {
     isBuying: boolean;
     discardNeeded: boolean;
 
-    constructor(id: string, username: string, icon: string){
+    constructor(id: string, username: string, icon: string, uid: string){
         this.id= id;
+        this.uid = uid
         this.username= username;
         this.hand= [];
         this.score= 0;
