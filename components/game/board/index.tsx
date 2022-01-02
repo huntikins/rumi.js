@@ -21,6 +21,8 @@ function Board({ game }) {
     */
   }
 
+  console.log(game)
+
   function placeholderCard(count: any) {
     const cardArr = [...Array(count)].map(
       (card) =>
@@ -39,7 +41,11 @@ function Board({ game }) {
         <div className="game-list">
           <ul className="game-list__section">
             <li className="game-list__section--item w-full">
-              <PlayerTile game={game}/>
+              {game.players.map((player)=>{
+                  return(
+                    <PlayerTile player={player} goal={game.goal} key={player.id}/>
+                  )
+              })}
             </li>
           </ul>
         </div>

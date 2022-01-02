@@ -1,49 +1,34 @@
 import React, { useCallback } from "react";
-import { useRouter } from "next/router";
-import { auth } from "../../utils/firebase";
+import { auth, db } from "../../utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import User from "utils/models/User";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 
 const EmailPasswordAuthSignUp = () => {
-  const Router = useRouter();
 
-  const signupHandler = useCallback(
-    async (event) => {
-      console.log("signupHandler called");
-      event.preventDefault();
-      const { email, password } = event.target.elements;
-      try {
-        console.log(email.value, password.value);
-        const {user} = await createUserWithEmailAndPassword(
-          auth,
-          email.value,
-          password.value
-        );
-        const defaultUsername = user.email.substring(
-          0,
-          user.email.lastIndexOf("@")
-        );
-        const username = user.displayName ? user.displayName : defaultUsername;
-        const body = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            ...new User(user.uid, user.email, username),
-          }),
-        };
-        const response = await fetch("/api/users", body);
-        const userData = await response.text();
-        console.log(userData)
-        Router.push("/");
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    [Router]
-  );
+  const signupHandler = useCallback(async (event) => {
+    console.log("signupHandler called");
+    event.preventDefault();
+    const { email, password } = event.target.elements;
+    try {
+      console.log(email.value, password.value);
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email.value,
+        password.value
+      );
+      const defaultUsername = user.email.substring(
+        0,
+        user.email.lastIndexOf("@")
+      );
+      const username = user.displayName ? user.displayName : defaultUsername;
+      const newUser = { ...new User(user.uid, user.email, username) };
+      const docRef = await addDoc(collection(db, "users"), newUser);
+      const update = await updateDoc(doc(db, "users", docRef.id), { id: docRef.id})
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <div>

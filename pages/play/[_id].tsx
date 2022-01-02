@@ -3,10 +3,11 @@ import Game from "components/layout/App";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useContext, useEffect, useState } from "react";
-import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { db } from "../../utils/firebase";
 import { getAuth } from "firebase/auth";
+import PlayerClass from "game/models/Player";
 
 const Play: NextPage = () => {
   const { currentUser } = getAuth();
@@ -36,8 +37,16 @@ const Play: NextPage = () => {
       (user: { uid: any }) => user.uid == currentUser.uid
     );
     if(!playerExists){
-      getDoc(doc(db, "users", currentUser.uid)).then(res=>{
-        console.log(res.data())
+      getDocs(query(collection(db, "users"), where("uid", "==", currentUser.uid))).then(res=>{
+        res.forEach(async (fbDoc) => {
+          const user = fbDoc.data()
+          const roomUpdate = await updateDoc(roomsRef, {
+            players: arrayUnion({...new PlayerClass(user.id, user.username, user.avatar)})
+          })
+          const userUpdate = await updateDoc(doc(db, "users", user.id), {
+            rooms: arrayUnion(rumi.id)
+          })
+        })
       })
     }
     console.log(playerExists);

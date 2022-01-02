@@ -45,7 +45,7 @@ export default function Main() {
       
       {currentUser && (<header className="relative animate-fade-in">
         <nav className="absolute px-4 py-4 right-0">
-          <button onClick={handleSignOut}>Sign Out</button>
+          <button onClick={handleSignOut} className="text-indigo-600">Sign Out</button>
         </nav>
       </header>)}
       <main className="h-screen flex justify-center items-center animate-fade-in">

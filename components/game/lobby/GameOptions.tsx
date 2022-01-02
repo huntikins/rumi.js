@@ -2,9 +2,10 @@ import A11yDialog from "a11y-dialog";
 import RumiInstance from "game/models/RumiInstance";
 import { useContext, useEffect, useRef } from "react";
 import { AuthContext } from "context/AuthContext";
-import { collection, addDoc, query, where, getDocs, updateDoc, doc as fbDoc  } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs, updateDoc, doc as fbDoc, arrayUnion  } from "firebase/firestore";
 import { db } from "../../../utils/firebase";
 import {useRouter} from "next/router";
+import PlayerClass from "game/models/Player";
 
 function GameOptions() {
 
@@ -54,10 +55,13 @@ function GameOptions() {
         querySnapshot.forEach(async (doc) => {
           // doc.data() is never undefined for query doc snapshots
           const player = doc.data();
-          rumi.players.push(player)
+          rumi.players.push({...new PlayerClass(player.id, player.username, player.avatar)})
           try {
             const roomsDoc = await addDoc(collection(db, "rooms"), {...rumi})
             const update = await updateDoc(fbDoc(db, "rooms", roomsDoc.id), { id: roomsDoc.id})
+            const userUpdate = await updateDoc(fbDoc(db, "users", player.id), {
+              rooms: arrayUnion(roomsDoc.id)
+            })
             router.push(`/play/${roomsDoc.id}`)
           } catch {
             console.error("Error adding document",{...rumi} );
