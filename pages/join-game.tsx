@@ -1,10 +1,9 @@
-import A11yDialog from "a11y-dialog";
 import GameCard from "components/card/GameCard";
 import App from "components/layout/App";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { db } from "utils/firebase";
 
 const JoinGame: NextPage = () => {
@@ -12,7 +11,8 @@ const JoinGame: NextPage = () => {
   const [games, setGames] = useState([]);
 
   useEffect(async () => {
-    const querySnapshot = await getDocs(collection(db, "rooms"));
+    const q = query(collection(db, "rooms"), where("active", "==", false))
+    const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       setGames((games) => [...games, doc.data()]);
       isLoading(false);

@@ -1,6 +1,6 @@
 
 //shuffle elements based on Fisher-Yates shuffle method
-function shuffle(array: Deck[]) {
+function shuffle(array: any) {
     var m = array.length,
     t,
     i;

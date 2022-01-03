@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { db } from "../../utils/firebase";
 import { getAuth } from "firebase/auth";
 import PlayerClass from "game/models/Player";
-import StartGame from "components/game/actions/StartGame";
+import StartGame from "components/game/board/StartGame";
 
 const Play: NextPage = () => {
   const { currentUser } = getAuth();
@@ -29,7 +29,7 @@ const Play: NextPage = () => {
 
   const roomsRef = doc(db, "rooms", _id);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (!_id) {
       return;
     }
@@ -37,17 +37,18 @@ const Play: NextPage = () => {
       setRumi(doc.data());
       isGameLoading(false);
     });
-      if (rumi !== null) {
-        if (rumi.players.length == rumi.player_count) {
-          isLoading(false);
-        }
+    if (rumi !== null) {
+      if (rumi.active) {
+        isLoading(false);
       }
+    }
     return () => {
       unsubRoom();
     };
-  }, [gameLoading]);
-
-  if (rumi) {
+  }, [gameLoading, isLoading]);
+  console.log(rumi);
+  if (rumi !==null) {
+    console.log(rumi)
     const playerExists = rumi.players.some(
       (user: { uid: any }) => user.uid == currentUser.uid
     );
@@ -80,36 +81,47 @@ const Play: NextPage = () => {
       <Game>
         {loading && (
           <section className="text-indigo-600 my-12 flex justify-center items-center flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="flex items-center justify-center">
-              <svg
-                className="animate-spin -ml-1 mr-3 h-5 w-5"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              <h1>Waiting for Players</h1>
-            </div>
             {!gameLoading && (
               <>
+                <div className="flex items-center justify-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  <h1>
+                    Waiting for{" "}
+                    {rumi.players.length == rumi.player_count
+                      ? "host."
+                      : "Players."}
+                  </h1>
+                </div>
                 <p className="mt-4">
                   {rumi.players.length} / {rumi.player_count}
                 </p>
                 <div>
-                  {rumi.host === currentUser.uid && <StartGame game={rumi} />}
+                  {rumi.host === currentUser.uid && (
+                    <StartGame
+                      game={rumi}
+                      setRumi={setRumi}
+                      isLoading={isLoading}
+                    />
+                  )}
                 </div>
               </>
             )}

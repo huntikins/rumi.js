@@ -1,4 +1,5 @@
 //deals cards out to playerCount
+import { Deck, Player } from 'interfaces';
 import shuffle from './shuffle';
 
 function deal(cardCount: number, players: Player[], cards: Deck[]) {
