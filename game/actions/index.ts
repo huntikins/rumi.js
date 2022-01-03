@@ -1,5 +1,5 @@
 import shuffle from './shuffle';
 import deal from './deal';
-import turnStart from './turn';
+import {turnStart,getPlayerIndex, drawCard, discardCard} from './turn'
 
-export {shuffle, deal, turnStart}
+export {shuffle, deal, turnStart, getPlayerIndex, drawCard, discardCard}

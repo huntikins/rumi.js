@@ -8,7 +8,7 @@ import PlayerTile from "./PlayerTile";
 
 import placeholderImg from "../../../assets/img/cards/default/back.png";
 
-function Board({ game }) {
+function Board({ game, setRumi, user }) {
   {
     /* TODO:
         - Implement client firestore
@@ -21,7 +21,7 @@ function Board({ game }) {
     */
   }
 
-  console.log(game)
+  console.log(game);
 
   function placeholderCard(count: any) {
     const cardArr = [...Array(count)].map(
@@ -41,10 +41,14 @@ function Board({ game }) {
         <div className="game-list">
           <ul className="game-list__section">
             <li className="game-list__section--item w-full">
-              {game.players.map((player)=>{
-                  return(
-                    <PlayerTile player={player} goal={game.goal} key={player.id}/>
-                  )
+              {game.players.map((player) => {
+                return (
+                  <PlayerTile
+                    player={player}
+                    goal={game.goal}
+                    key={player.id}
+                  />
+                );
               })}
             </li>
           </ul>
@@ -64,21 +68,29 @@ function Board({ game }) {
           </div>
           <div className="player-ui__actions flex justify-around items-center py-4">
             <Buy />
-            <Deal />
-            <Draw />
+            <Deal game={game} setRumi={setRumi}/>
+            <Draw game={game} setRumi={setRumi} />
           </div>
         </div>
-        
+
         <div className="flex justify-between p-4">
-            <div className="player-hand">
-            {
-                <Hand cards={placeholderCard(game.goal.cardCount)} type="player"/>
-            }
+          <div className="player-hand">
+            {game.players.map((player) => {
+              return player.uid == user.uid ? (
+                <Hand cards={player.hand} type="player" />
+              ) : (
+                ""
+              );
+            })}
+          </div>
+          <div>
+            <div>
+              <PlayHand />
             </div>
             <div>
-                <div><PlayHand /></div>
-                <div><Discard /></div>
+              <Discard game={game} setRumi={setRumi} />
             </div>
+          </div>
         </div>
       </section>
     </>

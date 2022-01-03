@@ -127,7 +127,7 @@ const Play: NextPage = () => {
             )}
           </section>
         )}
-        {!loading && <Board game={rumi} />}
+        {!loading && <Board game={rumi} setRumi={setRumi} user={currentUser} />}
       </Game>
     </>
   );
