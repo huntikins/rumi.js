@@ -13,13 +13,13 @@ class GameDeck {
     this.genCards
   }
 
-  genCards(id:string){
-    for(let i = 0; i<this.decksUsed;i++){
-      this.genDeck(id)
+  genCards(){
+    for(let i:number = 0; i<this.decksUsed;i++){
+      this.genDeck(i)
     }
   }
 
-  genDeck(id: string) {
+  genDeck(id: number) {
     //builds a single deck of cards
     this.genSet("spades", id);
     this.genSet("diamonds", id);
@@ -30,8 +30,8 @@ class GameDeck {
       "joker",
       "black",
       50,
-      `../img/cards/default/black_joker.png`,
-      `../img/cards/default/back.png`
+      `/cards/default/black_joker.png`,
+      `/cards/default/back.png`
     )}
     );
     this.cards.push(
@@ -40,15 +40,15 @@ class GameDeck {
         "joker",
         "red",
         50,
-        `../img/cards/default/red_joker.png`,
-        `../img/cards/default/back.png`
+        `/cards/default/red_joker.png`,
+        `/cards/default/back.png`
       )}
     );
     return this.cards;
   }
 
   //generate the card objects using a loop
-  genSet(cardSuit: string, id: string) {
+  genSet(cardSuit: string, id: number) {
     for (let i = 1; i < 14; i++) {
       var cardValue;
       var cardPoint;
@@ -83,15 +83,15 @@ class GameDeck {
           cardValue,
           cardSuit,
           cardPoint,
-          `../img/cards/default/${cardValue}_of_${cardSuit}.png`,
-          `../img/cards/default/back.png`
+          `/cards/default/${cardValue}_of_${cardSuit}.png`,
+          `/cards/default/back.png`
         )}
       );
     }
   }
 
   //generate a random hex uuid
-  generateId(cardValue: string | number, cardSuit: string, id: string) {
+  generateId(cardValue: string | number, cardSuit: string, id: number) {
     return `${cardSuit}_${cardValue}_${id}`;
   }
 

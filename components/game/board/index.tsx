@@ -6,7 +6,7 @@ import Draw from "../actions/Draw";
 import Hand from "../Hand";
 import PlayerTile from "./PlayerTile";
 
-import placeholderImg from "../../../assets/img/cards/default/back.png";
+import placeholderImg from "../../../public/cards/default/back.png";
 
 function Board({ game, setRumi, user }) {
   {

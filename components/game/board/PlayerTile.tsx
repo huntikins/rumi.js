@@ -1,5 +1,5 @@
 import Hand from "../Hand";
-import placeholderImg from "../../../assets/img/cards/default/back.png";
+import placeholderImg from "../../../public/cards/default/back.png";
 
 function PlayerTile({ player, goal }) {
   function placeholderCard(count: number) {

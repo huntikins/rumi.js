@@ -33,22 +33,12 @@ class RumiInstance {
             player_id: ''
         };
         this.game_name= game_name;
-        this.cards = this.gameInit();
+        this.cards = [];
         this.discards = []
         this.goal = roundSchema[0];
         this.host = host.id;
         this.host_name = host.username;
         this.host_icon = host.icon;
-    }
-
-    /**
-     * Game Instance Functions
-     */
-    gameInit() {
-        // Create new game instance
-        const game = new GameDeck(+this.player_count);
-        game.genCards(this.id)
-        return [...game.cards];
     }
 
 }

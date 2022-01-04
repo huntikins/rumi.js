@@ -24,6 +24,7 @@ export function turnStart(rumi: any, stateChanger: any) {
   console.log(hands);
   console.log(liveDeck);
   console.log(rumiProxy);
+  //TODO: Update firebase with dealt cards
 }
 
 
