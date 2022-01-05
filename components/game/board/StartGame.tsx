@@ -7,12 +7,12 @@ function StartGame({ game, setRumi, isLoading }) {
   const playersShuffled = shuffle(game.players);
   async function handleGameStart() {
     console.log(shuffle(game.players));
-    const deck = new GameDeck(game.players.length);
+    const deck =new GameDeck(game.players.length);
     deck.genCards()
     setRumi((prevState: any) => {
       return {
         ...prevState,
-        cards: deck,
+        cards: {...deck},
         round: 1,
         active: true,
         currentPlayer: getCurrentPlayer(),
@@ -22,7 +22,7 @@ function StartGame({ game, setRumi, isLoading }) {
     const roomsRef = doc(db, "rooms", game.id);
 
     await updateDoc(roomsRef, {
-      cards: deck,
+      cards: {...deck},
       round: 1,
       active: true,
       currentPlayer: getCurrentPlayer(),

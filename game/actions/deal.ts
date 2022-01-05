@@ -15,7 +15,7 @@ function deal(cardCount: number, players: Player[], cards: Deck[]) {
     for(let i=0; i < cardCount;i++){  
         players.forEach( (_: any, index: number) => {
             console.log(index)
-            hands[index].push(liveDeck.shift());
+            hands[index].push([...liveDeck].shift());
         })
     }
     return {hands, liveDeck} as {hands: any, liveDeck: Deck[]};

@@ -27,7 +27,7 @@ function Board({ game, setRumi, user }) {
     const cardArr = [...Array(count)].map(
       (card) =>
         (card = {
-          img: placeholderImg,
+          front: placeholderImg,
           alt: "Placeholder card image",
         })
     );
