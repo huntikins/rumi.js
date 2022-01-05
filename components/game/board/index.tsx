@@ -7,6 +7,7 @@ import Hand from "../Hand";
 import PlayerTile from "./PlayerTile";
 
 import placeholderImg from "../../../public/cards/default/back.png";
+import { useState } from "react";
 
 function Board({ game, setRumi, user }) {
   {
@@ -20,8 +21,9 @@ function Board({ game, setRumi, user }) {
         - work on remaining class functions
     */
   }
-
-  console.log(game);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [discardActive, setDiscardActive] = useState(false);
+  const [playActive, setPlayActive] = useState(false);
 
   function placeholderCard(count: any) {
     const cardArr = [...Array(count)].map(
@@ -68,7 +70,7 @@ function Board({ game, setRumi, user }) {
           </div>
           <div className="player-ui__actions flex justify-around items-center py-4">
             <Buy />
-            <Deal game={game} setRumi={setRumi}/>
+            <Deal game={game} setRumi={setRumi} />
             <Draw game={game} setRumi={setRumi} />
           </div>
         </div>
@@ -77,7 +79,11 @@ function Board({ game, setRumi, user }) {
           <div className="player-hand">
             {game.players.map((player) => {
               return player.uid == user.uid ? (
-                <Hand cards={player.hand} type="player" />
+                <Hand
+                  cards={player.hand}
+                  type="player"
+                  selectCard={setSelectedCard}
+                />
               ) : (
                 ""
               );
@@ -85,10 +91,19 @@ function Board({ game, setRumi, user }) {
           </div>
           <div>
             <div>
+            <h3 className="text-center font-bold text-indigo-600">&nbsp;{playActive && (<span>Drag Cards to Play</span>)}&nbsp;</h3>
               <PlayHand />
             </div>
             <div>
-              <Discard game={game} setRumi={setRumi} />
+              <h3 className="text-center font-bold text-indigo-600">&nbsp;{discardActive && (<span>Select a Discard</span>)}&nbsp;</h3>
+              <Discard
+                discardActive={discardActive}
+                setDiscardActive={setDiscardActive}
+                game={game}
+                setRumi={setRumi}
+                toDiscard={selectedCard}
+                clearSelection={setSelectedCard}
+              />
             </div>
           </div>
         </div>

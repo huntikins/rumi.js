@@ -1,28 +1,33 @@
 import { doc, updateDoc } from "firebase/firestore";
 import { shuffle, turnStart } from "game/actions";
 import GameDeck from "game/models/GameDeck";
+import { useState } from "react";
 import { db } from "utils/firebase";
 
 function StartGame({ game, setRumi, isLoading }) {
   const playersShuffled = shuffle(game.players);
+
+  const [stateLoading, setStateLoading] = useState(true)
+
   async function handleGameStart() {
-    console.log(shuffle(game.players));
-    const deck =new GameDeck(game.players.length);
+    const deck = new GameDeck(game.players.length);
     deck.genCards()
     setRumi((prevState: any) => {
       return {
         ...prevState,
-        cards: {...deck},
+        cards: [...deck.cards],
         round: 1,
         active: true,
         currentPlayer: getCurrentPlayer(),
         players: playersShuffled,
       };
-    });
+    }, () => {
+      setStateLoading(false)
+  });
     const roomsRef = doc(db, "rooms", game.id);
 
     await updateDoc(roomsRef, {
-      cards: {...deck},
+      cards: [...deck.cards],
       round: 1,
       active: true,
       currentPlayer: getCurrentPlayer(),
@@ -30,7 +35,9 @@ function StartGame({ game, setRumi, isLoading }) {
     });
 
     isLoading(false);
-    turnStart(game, setRumi)
+    if(!stateLoading){
+      turnStart(game, setRumi)
+    }
   }
 
   function getCurrentPlayer() {
